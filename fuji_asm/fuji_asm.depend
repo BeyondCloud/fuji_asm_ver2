@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1497071875 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
+1497073096 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
 	<iostream>
 	<fstream>
 	<string.h>
@@ -9,18 +9,22 @@
 	<map>
 	<iomanip>
 	<assert.h>
+	"opcode_proc.h"
 	"opcode.h"
 	"map_tbl.h"
 
-1497057539 c:\users\a1989\desktop\fuji_asm_new\inc\opcode.h
+1497083725 c:\users\a1989\desktop\fuji_asm_new\inc\opcode.h
 	<string>
+	"opcode_proc.h"
 
 1497003332 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode.c
 	"opcode.h"
 
-1497064991 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
+1497083927 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
 	"map_tbl.h"
+	"opcode_proc.h"
 	"opcode.h"
+	"mov.h"
 
 1495291129 c:\users\a1989\desktop\fuji_asm_new\inc\map_tbl.h
 	<map>
@@ -35,4 +39,23 @@
 	<sstream>
 	<iomanip>
 	<string.h>
+
+1497084981 c:\users\a1989\desktop\fuji_asm_new\inc\opcode_proc.h
+	<string>
+	"map_tbl.h"
+	<iostream>
+	<bitset>
+	<assert.h>
+	<sstream>
+	<iomanip>
+	<string.h>
+
+1497083071 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode_proc.cpp
+	"opcode_proc.h"
+
+1497083898 c:\users\a1989\desktop\fuji_asm_new\inc\mov.h
+	"opcode.h"
+
+1497083658 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
+	"mov.h"
 

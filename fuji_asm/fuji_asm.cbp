@@ -34,10 +34,13 @@
 			<Add option="-std=c++11" />
 		</Compiler>
 		<Unit filename="../inc/map_tbl.h" />
+		<Unit filename="../inc/mov.h" />
 		<Unit filename="../inc/opcode.h" />
+		<Unit filename="../inc/opcode_proc.h" />
 		<Unit filename="../src/main.cpp" />
 		<Unit filename="../src/map_tbl.cpp" />
-		<Unit filename="../src/opcode.cpp" />
+		<Unit filename="../src/mov.cpp" />
+		<Unit filename="../src/opcode_proc.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -1,5 +1,8 @@
 #include "map_tbl.h"
+#include "opcode_proc.h"
 #include "opcode.h"
+#include "mov.h"
+
 map<string, op_fp> op_tbl;
 map<string, string> reg32_tbl;
 map<string, string> reg16_tbl;

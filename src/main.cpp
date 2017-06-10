@@ -11,7 +11,7 @@
 using namespace std;
 stringstream ss;
 
-
+#include "opcode_proc.h"
 #include "opcode.h"
 #include "map_tbl.h"
 
