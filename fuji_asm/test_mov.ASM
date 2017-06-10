@@ -10,10 +10,13 @@
    size2   DW   $-Goodbye
 
     uMSG   DB   CR, LF, "   Sum(1 .. "
-    uIdgt  DB  1
-           DB   ") = "
+
+           
     uRval  DW   1
-           DB   CR, LF, '$'           
+           DB   CR, LF, '$'     
+    uIdgt  DB  1
+           DB   ") ="
+     
 .CODE
    gLoop:  MOV    DL, '!'   ;B2 3F 
            MOV    AH, 01H   ;B4 01  
@@ -24,11 +27,12 @@
            MOV    DL, LF    ;B2 0A
            MOV    AX, 0     ;B8 00 00 
            MOV    DH, 0     ;B6 00
-           MOV    AX, @DATA ;B8 00 00  
+           MOV    AX, @CODE ;B8 00 00             
            MOV    AH, 09H   ;B4 09
-           MOV    uIdgt, DL ;88 16 00 00
            MOV    DL, AL    ;8A D0
+           MOV    uIdgt, DL ;88 16 00 00
            MOV    uRval, AX ;A3 00 00
            MOV    AH, 09H   ;B4 09
            MOV    AX,4C00H  ;B8 00 4C
+           MOV    DS, AX
 END

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1497087065 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
+1497101301 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
 	<iostream>
 	<fstream>
 	<string.h>
@@ -20,13 +20,13 @@
 1497003332 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode.c
 	"opcode.h"
 
-1497086501 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
+1497089522 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
 	"map_tbl.h"
 	"opcode_proc.h"
 	"opcode.h"
 	"mov.h"
 
-1497086488 c:\users\a1989\desktop\fuji_asm_new\inc\map_tbl.h
+1497088867 c:\users\a1989\desktop\fuji_asm_new\inc\map_tbl.h
 	<map>
 	<string>
 
@@ -40,7 +40,7 @@
 	<iomanip>
 	<string.h>
 
-1497084981 c:\users\a1989\desktop\fuji_asm_new\inc\opcode_proc.h
+1497088884 c:\users\a1989\desktop\fuji_asm_new\inc\opcode_proc.h
 	<string>
 	"map_tbl.h"
 	<iostream>
@@ -50,12 +50,12 @@
 	<iomanip>
 	<string.h>
 
-1497086601 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode_proc.cpp
+1497091572 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode_proc.cpp
 	"opcode_proc.h"
 
 1497086427 c:\users\a1989\desktop\fuji_asm_new\inc\mov.h
 	"opcode.h"
 
-1497086986 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
+1497091514 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
 	"mov.h"
 
