@@ -5,8 +5,19 @@ void mov(char *chp1, char *chp2)
     //xxxxx+opr1+xxxxx+opr2
     string opstr; //string to store binary to print
     string str[2] ={string(chp1),string(chp2)};
-    init_operand(str[0],opr1);
+    if(tbl_find(equ_tbl,str[0]) )
+    {
+        str[0] = equ_tbl[str[0]];
 
+    }
+    if(tbl_find(equ_tbl,str[1]) )
+    {
+        str[1] = equ_tbl[str[1]];
+
+    }
+
+
+    init_operand(str[0],opr1);
     init_operand(str[1],opr2);
 
     if(type_r(opr1)&&type_imm(opr2))

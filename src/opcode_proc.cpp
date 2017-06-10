@@ -134,7 +134,7 @@ void init_operand(string str,oprand_t &opr)
     {}
     else
     {
-        cout<<"optype not found";
+        cout<<"optype not found\n";
         opr.type = N_A;
     }
 

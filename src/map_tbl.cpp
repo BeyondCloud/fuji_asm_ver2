@@ -8,6 +8,7 @@ map<string, string> reg32_tbl;
 map<string, string> reg16_tbl;
 map<string, string> reg8_tbl;
 map<string, string> mod_tbl;
+map<string, string> equ_tbl;
 
 void tbl_init()
 {
@@ -44,6 +45,8 @@ void tbl_init()
     mod_tbl["BH"] = "111";
 
     op_tbl["MOV"]= mov; //B8+r (r: register)
+
+
     /*
     op_tbl["add"] = add;//01C3  add %eax, %ebx
 

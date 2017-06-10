@@ -19,7 +19,6 @@ stringstream ss;
 
 ifstream infile("test_mov.cpp");
 ofstream outfile ("example.txt");
-
 int main () {
 
 
@@ -35,6 +34,7 @@ int main () {
     char* opr[2];
     string mnem="0";
     assert(infile.is_open());
+
     while ( getline (infile,line) )
     {
       strcpy(str,line.c_str());
@@ -57,6 +57,21 @@ int main () {
                 break;
             }
         }
+        if(!pch_str.compare("EQU"))
+        {
+            strcpy(str,line.c_str());
+            cout<<str;
+            pch = strtok (str," \t");
+            string def_name(pch);
+            cout<<def_name<<" define to";
+            pch = strtok (NULL, " \t");
+            pch = strtok (NULL, " \t");
+            string to_name(pch);
+            equ_tbl[def_name]=to_name;
+            cout<<to_name;
+
+            break;
+        }
         pch = strtok (NULL, " \t");
 
       }
@@ -74,10 +89,7 @@ int main () {
             {
                 break;
             }
-    //        if(pch[strlen(pch)-1]!=':')
                 cout << pch << "\t";
-
-
             pch = strtok (NULL, " \t,");
             if(opr_id < 2)
             {

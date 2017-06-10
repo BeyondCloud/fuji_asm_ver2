@@ -12,6 +12,8 @@ extern map<string, string> reg32_tbl;
 extern map<string, string> reg16_tbl;
 extern map<string, string> reg8_tbl;
 extern map<string, string> mod_tbl;
+extern map<string, string> equ_tbl;
+
 //map<string, op_fp>::iterator iter;
 //eax 000 , ebx 011 ,ecx 001 ,edx  010
 void tbl_init();
