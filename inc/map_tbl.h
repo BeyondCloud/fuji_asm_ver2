@@ -11,7 +11,10 @@ extern map<string, op_fp> op_tbl;
 extern map<string, string> reg32_tbl;
 extern map<string, string> reg16_tbl;
 extern map<string, string> reg8_tbl;
+extern map<string, string> sreg_tbl;
+
 extern map<string, string> mod_tbl;
+
 extern map<string, string> equ_tbl;
 
 //map<string, op_fp>::iterator iter;

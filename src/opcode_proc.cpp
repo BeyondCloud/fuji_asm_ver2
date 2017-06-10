@@ -130,7 +130,15 @@ void init_operand(string str,oprand_t &opr)
         opr.type = reg;
         opr.reg_val = reg8_tbl[str];
     }
+    else if(tbl_find(sreg_tbl,str))
+    {
+        opr.bits = 8;
+        opr.type = sreg;
+        opr.reg_val = sreg_tbl[str];
+    }
     else if(setup_imm(opr,str,opr1.bits))
+    {}
+    else if(opr.name[0]=='@')
     {}
     else
     {

@@ -7,6 +7,7 @@ map<string, op_fp> op_tbl;
 map<string, string> reg32_tbl;
 map<string, string> reg16_tbl;
 map<string, string> reg8_tbl;
+map<string, string> sreg_tbl;
 map<string, string> mod_tbl;
 map<string, string> equ_tbl;
 
@@ -39,10 +40,13 @@ void tbl_init()
     reg8_tbl["DH"] = "110";
     reg8_tbl["BH"] = "111";
 
-    mod_tbl["AH"] = "100";
-    mod_tbl["CH"] = "101";
-    mod_tbl["DH"] = "110";
-    mod_tbl["BH"] = "111";
+    sreg_tbl["ES"] = "000";
+    sreg_tbl["CS"] = "001";//8E c8
+    sreg_tbl["SS"] = "010";//8E d0
+    sreg_tbl["DS"] = "011";//8E d8
+
+
+
 
     op_tbl["MOV"]= mov; //B8+r (r: register)
 

@@ -21,13 +21,12 @@ struct oprand_t
 
 };
 extern oprand_t opr1,opr2;
-//enum operand_type{reg32=1,reg16,reg8,imm};
 bool setup_imm(oprand_t &opr,string const& s,int bits);
 
 string str_bin2hex(int hex_len,string bin);
 bool is_number(const string& s);
 
-typedef enum{reg,mem,imm,N_A} type_t;
+typedef enum{reg,sreg,mem,imm,N_A} type_t;
 
 void init_operand(string str,oprand_t &opr);
 
@@ -44,6 +43,7 @@ void init_operand(string str,oprand_t &opr);
 #define type_rm8(opr_t) ((opr_t.type == reg ||opr_t.type == mem)&& opr_t.bits == 8)
 
 #define type_r(opr_t) (opr_t.type == reg)
+#define type_sr(opr_t) (opr_t.type == sreg)
 #define type_imm(opr_t) (opr_t.type == imm)
 
 #define type_rm(opr_t) ((opr_t.type == reg)||(opr_t.type == mem))
