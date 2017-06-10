@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1497071875 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
+	<iostream>
+	<fstream>
+	<string.h>
+	<sstream>
+	<bitset>
+	<stdio.h>
+	<map>
+	<iomanip>
+	<assert.h>
+	"opcode.h"
+	"map_tbl.h"
+
+1497057539 c:\users\a1989\desktop\fuji_asm_new\inc\opcode.h
+	<string>
+
+1497003332 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode.c
+	"opcode.h"
+
+1497064991 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
+	"map_tbl.h"
+	"opcode.h"
+
+1495291129 c:\users\a1989\desktop\fuji_asm_new\inc\map_tbl.h
+	<map>
+	<string>
+
+1497060987 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode.cpp
+	"opcode.h"
+	"map_tbl.h"
+	<iostream>
+	<bitset>
+	<assert.h>
+	<sstream>
+	<iomanip>
+	<string.h>
+
