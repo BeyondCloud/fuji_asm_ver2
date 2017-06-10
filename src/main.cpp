@@ -17,7 +17,7 @@ stringstream ss;
 #include "map_tbl.h"
 
 
-char org_name[]="test_mov.cpp";
+char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
 
 fstream org_in;
@@ -29,8 +29,15 @@ int main () {
 
 //    setup_imm(opr1,"34H");
 //    cout<<opr1.imm_bin_st;
-
-
+/*
+    char *fooch;
+    char foo[128];
+    string s= " \t";
+    strcpy(foo,s.c_str());
+    fooch = strtok (foo," \t,");
+    cout<<fooch;
+    return 0;
+*/
     tbl_init();
     string line;
     char str[128];
@@ -50,12 +57,15 @@ int main () {
     bool pass_out;
     while ( getline (org_in,line) )
     {
+     //   cout<<endl<<"l:"<<line<<endl;
         pass_out = true;
         strcpy(str,line.c_str());
         pch = strtok (str," \t,");
-        string pch_str(pch);
+        //avoid space
         if(pch==NULL)
-            break;
+            continue;
+        string pch_str(pch);
+        //init segment
         if(str[0]=='.')
         {
 
@@ -75,7 +85,7 @@ int main () {
             }
             pass_out = false;
         }
-
+        //init EQU table
         do
         {
             string find_equ_str(pch);
@@ -86,12 +96,10 @@ int main () {
                 cout<<str;
                 pch = strtok (str," \t");
                 string def_name(pch);
-                cout<<def_name<<" define to";
                 pch = strtok (NULL, " \t");
                 pch = strtok (NULL, " \t");
                 string to_name(pch);
                 equ_tbl[def_name]=to_name;
-                cout<<to_name;
                 pass_out = false;
                 break;
 
@@ -117,9 +125,10 @@ int main () {
 
         cout<<endl;
     }
-
     org_in.close();
     pass1.close();
+    return 0;
+
     pass1.open("pass1.txt",ios::in);
     if(!pass1)
     {

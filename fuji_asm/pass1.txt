@@ -1,17 +1,3 @@
-gLoop:	MOV	DL,	'?'	
-MOV	AH,	01H	
-MOV	DL,	BEL	
-MOV	AH,	02H	
-MOV	AX,	0	
-MOV	DL,	CR	
-MOV	DL,	LF	
-MOV	DH,	0	
-MOV	AX,	@DATA	
-MOV	AH,	09H	
-MOV	AH,	09H	
-MOV	AX,4C00H	
-MOV	DL,	AL	
-MOV	DL,	AL	
-MOV	uIdgt,	DL	
-MOV	uRval,	AX	
-MOV	DS,	AX	
+
+
+END	
