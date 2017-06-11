@@ -9,7 +9,10 @@
 #include <sstream>
 #include <iomanip>
 #include <string.h>
+#include <stdexcept>
 using namespace std;
+std::string string_to_hex(const std::string& input);
+std::string hex_to_string(const std::string& input);
 inline const char* h2b(char c);
 struct oprand_t
 {
@@ -20,6 +23,7 @@ struct oprand_t
     string reg_val;//ex:000,001
 
 };
+bool is_hex_str(string str);
 extern oprand_t opr1,opr2;
 bool setup_imm(oprand_t &opr,string const& s,int bits);
 

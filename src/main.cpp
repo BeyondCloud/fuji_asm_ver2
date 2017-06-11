@@ -9,35 +9,217 @@
 #include  <iomanip>
 #include  <assert.h>
 #include <algorithm>
+
 using namespace std;
 stringstream ss;
 
 #include "opcode_proc.h"
 #include "opcode.h"
 #include "map_tbl.h"
-
+#include "misc_str.h"
 
 char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
-
+string ident = "uASM-TV01S.ASM";
 fstream org_in;
 fstream pass1;
-string init_str = "800F000D746573745F646174612E41534D9C962B000005535441434B055F44415441064447524F5550055F5445585405535441434B044441544104434F44450E9807004800000508010B9807004800000307010E980700740";
-string postinit_str ="020601E29A060004FF02FF035988040000A201D1";
-int main () {
+
+string final_str;
+int data_PC = 0;//program counter
+void pFinal()
+{
+
+    cout<<"    00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F";
+    int line = 0;
+    for(int i =0;i<final_str.size();i++)
+    {
+
+        if(i%2==0)
+            cout<<" ";
+        if(i%32==0)
+        {
+            cout<<endl;
+            ss.str("");
+            ss << hex << setfill('0')<<setw(3)<<line;
+            cout<<ss.str()<<" ";
+            line++;
+        }
+        cout<<final_str[i];
+    }
+}
+void printPC(int pc)
+{
+     cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
+}
+string getPCstr(const int pc)
+{
+    ss.str("");
+    ss<<hex<<setw(4)<<setfill('0')<<pc;
+    return ss.str();
+}
+char last_letter(char *str)
+{
+  int len = strlen(str);
+  return len > 0 ? *(str + len - 1 ): *str;
+}
+string lowerCase(string data)
+{
+    transform(data.begin(), data.end(), data.begin(), ::tolower);
+    return data;
+}
+void data_seg()
+{
+    string line;
+    char str[128];
+    char *pch;
+    printPC(data_PC);
+    bool isNewAddr = true;
+    while ( getline (org_in,line) )
+    {
+        isNewAddr = true;
+        strcpy(str,line.c_str());
+        if(str[0]=='.') //exit data field
+            break;
+        pch = strtok (str," \t,");
+        if(pch==NULL)   //avoid empty line
+            continue;
+
+        while(1)
+        {
+
+            if(pch==NULL)
+                break;
+            string pch_str(pch);
+            if(pch_str == "DB")
+            {
+                strcpy(str,line.c_str());
+                bool strREC= false;
+                string scan1;
+                //expand "xxx",'x' to ascii HEX code
+                for(int i=0;i<line.size();i++)
+                {
+                    if(str[i] == '\"'|| str[i] == '\'')
+                    {
+                        strREC = !strREC;
+                        continue;
+                    }
+                    if(strREC)
+                    {
+                        string asc;
+                        asc+=str[i];
+                        scan1+= string_to_hex(asc);
+
+                    }else
+                    {
+                        scan1+=str[i];
+                    }
+                }
+                strcpy(str,scan1.c_str());
+              //  cout<<endl<<"scan1:"<<str;
+                pch = strtok (str," \t,");//remove name
+                string name(pch);
+                if(name == "DB" ||name == "DW")
+                {
+                    isNewAddr = false;
+                }
+                pch = strtok (NULL," \t,"); //remove DB
+
+                string result;
+                if(isNewAddr)
+                    pch = strtok (NULL," \t,");
+                while(pch!=NULL)
+                {
+
+                    string st(pch);
+                    if(tbl_find(equ_tbl,st))
+                    {
+                        //result +=equ_tbl[st];
+                        string tmp = equ_tbl[st];
+                        if (tmp[tmp.size()-1] == 'H')
+                        {
+                            string noH = tmp.substr(0,tmp.size()-1);
+                            if(is_hex_str(noH))
+                                result+=noH;
+                        }
+
+                    }
+                    else if(is_number(st))
+                    {
+                        int num;
+                        ss.str("");
+                        ss << hex << setfill('0')<<setw(2)<<st;
+                        result +=ss.str();
+                    }
+                    else
+                        result+=pch;
+                    pch = strtok (NULL," \t,");
+
+                }
+              //  printPC(data_PC);
+              cout<<endl;
+                data_PC+= (result.size()/2);
+                cout<<result;
+                printPC(data_PC);
+                name = lowerCase(name);
+                if(isNewAddr)
+                    addr_tbl[name] =getPCstr(data_PC);
+                break;
+                //cout<<lowerCase(name);
+                //for(;;){}
+            }
+            else if(pch_str == "DW")
+            {
+                pch = strtok (NULL," \t$-");//remove name
+                string s(pch);
+                if(is_number(s))
+                {
+                    int num;
+                    ss.str("");
+                    ss << hex << setfill('0')<<setw(4)<<s;
+                    data_PC+=2;
+                    cout<<ss.str();
+                    printPC(data_PC);
+                    break;
+                }
+                s = lowerCase(s);
+
+                if(tbl_find(addr_tbl,s))
+                {
+                    cout<<addr_tbl[s];
+                    data_PC+=2;
+                    printPC(data_PC);
+                }
+                break;
+            }
+            pch = strtok (NULL," \t,");
+
+        }
+    }
+    for(;;){}
+}
+
+int main ()
+{
+
+    final_str = "80";
+    ss.str("");
+    ss << hex << setfill('0')<<setw(2)<<ident.size()+2;
+    final_str +=ss.str();
+    final_str+="00";
+    ss.str("");
+    ss << hex << setfill('0')<<setw(2)<<ident.size();
+    final_str+= ss.str();
+    final_str+=string_to_hex(ident);
+    final_str+="xx";
+    final_str+=init_str;
+    final_str+=stack_size_str;
+    final_str+=after_stack_size_str;
 
 
-//    setup_imm(opr1,"34H");
-//    cout<<opr1.imm_bin_st;
-/*
-    char *fooch;
-    char foo[128];
-    string s= " \t";
-    strcpy(foo,s.c_str());
-    fooch = strtok (foo," \t,");
-    cout<<fooch;
-    return 0;
-*/
+
+  //  pFinal();
+  //  return 0;
+
     tbl_init();
     string line;
     char str[128];
@@ -79,10 +261,12 @@ int main () {
                     pch_str2 = pch_str2.substr(0,pch_str.size()-2);
                     reverse(pch_str2.begin(), pch_str2.end());
                     init_str+=pch_str2;
-                    init_str+=postinit_str;
+              //      init_str+=after_stack_size_str;
 
                 }
             }
+            else if(pch_str=="DATA")
+                data_seg();
             pass_out = false;
         }
         //init EQU table
@@ -127,6 +311,8 @@ int main () {
     }
     org_in.close();
     pass1.close();
+
+
     return 0;
 
     pass1.open("pass1.txt",ios::in);
@@ -211,3 +397,4 @@ int main () {
   return 0;
 
 }
+

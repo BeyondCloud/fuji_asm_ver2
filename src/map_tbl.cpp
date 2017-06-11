@@ -10,6 +10,7 @@ map<string, string> reg8_tbl;
 map<string, string> sreg_tbl;
 map<string, string> mod_tbl;
 map<string, string> equ_tbl;
+map<string, string> addr_tbl;
 
 void tbl_init()
 {

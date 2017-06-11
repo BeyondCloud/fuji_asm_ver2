@@ -2,6 +2,48 @@
 
 using namespace std;
 oprand_t opr1,opr2;
+bool is_hex_str(string str)
+{
+    return (str.find_first_not_of("0123456789ABCDEFabcdef", 0) == string::npos);
+}
+std::string string_to_hex(const std::string& input)
+{
+    static const char* const lut = "0123456789ABCDEF";
+    size_t len = input.length();
+
+    std::string output;
+    output.reserve(2 * len);
+    for (size_t i = 0; i < len; ++i)
+    {
+        const unsigned char c = input[i];
+        output.push_back(lut[c >> 4]);
+        output.push_back(lut[c & 15]);
+    }
+    return output;
+}
+
+std::string hex_to_string(const std::string& input)
+{
+    static const char* const lut = "0123456789ABCDEF";
+    size_t len = input.length();
+    if (len & 1) throw std::invalid_argument("odd length");
+
+    std::string output;
+    output.reserve(len / 2);
+    for (size_t i = 0; i < len; i += 2)
+    {
+        char a = input[i];
+        const char* p = std::lower_bound(lut, lut + 16, a);
+        if (*p != a) throw std::invalid_argument("not a hex digit");
+
+        char b = input[i + 1];
+        const char* q = std::lower_bound(lut, lut + 16, b);
+        if (*q != b) throw std::invalid_argument("not a hex digit");
+
+        output.push_back(((p - lut) << 4) | (q - lut));
+    }
+    return output;
+}
 bool  setup_imm(oprand_t &opr,string const& s,int bits)
 {
 
@@ -59,7 +101,7 @@ bool  setup_imm(oprand_t &opr,string const& s,int bits)
     {
         string st = s.substr(0,s.size()-1);//remove H
         string str_bin = "";
-        if(st.find_first_not_of("0123456789ABCDEFabcdef", 0) != string::npos)
+        if(!is_hex_str(st))
             return false;
         opr.type = imm;
         if(st.size()== 2)
