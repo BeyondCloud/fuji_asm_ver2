@@ -34,6 +34,7 @@
 			<Add option="-std=c++11" />
 		</Compiler>
 		<Unit filename="../inc/map_tbl.h" />
+		<Unit filename="../inc/misc_str.h" />
 		<Unit filename="../inc/mov.h" />
 		<Unit filename="../inc/opcode.h" />
 		<Unit filename="../inc/opcode_proc.h" />

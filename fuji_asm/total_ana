@@ -1,0 +1,85 @@
+CALL note:
+ 0018  E8 0002			           CALL   putChr  >next ins addr is 001B ,001B+2 = 001D
+ 001B  EB E3			           JMP    gLoop
+ 001D				   getDgt  ENDP              
+ 001D				   putChr  PROC
+ 0029  E8 FFF1			           CALL   putChr >next ins addr is 002C ,002C+FFF1 = 001D
+ 002C  B2 0A			           MOV    DL, LF
+
+
+74 44 67 74 00 00 00 07 4E 65 77 4C 69 6E 65 27 00 00 06 70 75 74 43 68 72 1D 00 00 06 64 6F 43 6F 6D 70 32 00 00 04 4D 41 49 4E 47 00 00 53 88 04 00 00 A2 01 D1 A0 68 00 02 00 00 
+//Hello
+25 25 20 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 20 45 78 65 63 75 74 69 6F 6E 20 73 74 61 72 74 73 2E 2E 2E 2E 07 0D 0A 24 
+29 00 	;29 00 ,29h = 41 = sizeof start1 string 
+//Goodbye
+25 25 20 50 72 6F 67 72 61 6D 20 73 74 6F 70 73 2E 20 45 78 69 74 20 6E 6F 77 21 07 0D 0A 24 
+1F 00 
+//uMsg
+0D 0A 20 20 20 53 75 6D 28 31 20 2E 2E 20 
+//uIdgt
+01 
+29 20 3D 20
+//uRval
+01 00
+0D 0A 24
+//getDgt  PROC   
+6E A0 84 00 01 00 00 
+B2 3F
+E8 18 00 
+B4 01 
+CD 21 
+3C 30 
+7E 09 
+3C 39 
+7F 05 
+8A D0 
+2C 30 
+C3	//RET
+//gError
+B2 07 
+E8 02 00 
+EB E3 
+80 FA 00 
+74 04 
+B4 02 
+CD 21 
+C3 //RET
+	//Newline Proc
+B2 0D 
+E8 F1 FF 
+B2 0A 
+E8 EC FF 
+C3 //RET
+	//Do Comp proc
+B8 00 00 
+B6 00 
+83 FA 00 
+7E 05 
+03 C2 
+4A 
+EB F6 
+D4 
+0A 
+05 30 30 
+C3 //RET
+	//Main Proc
+B8 00 00 
+8E D8 
+8D 16 00 00 
+B4 09 
+CD 21 
+E8 D0 FF 
+E8 A6 FF 
+88 16 00 00 
+8A D0 
+E8 CF FF 
+86 E0 
+A3 00 00
+8D 16 00 00 
+B4 09
+CD 21
+E8 B4 FF 8D 16 00 00 B4 09
+CD 21 
+
+======END====
+B8 00 4C CD 21 3B 9C 26 00 C8 48 55 01 C4 4E 14 01 02 C4 5C 10 01 02 5A 00 C4 66 10 01 02 5F 00 C4 6A 10 01 02 4C 00 C4 75 10 01 02 2B 00 82 8A 02 00 00 74
