@@ -2,12 +2,18 @@ getDgt	PROC
 
 gLoop:	MOV	DL,	'?'	
 CALL	putChr	
+MOV	AH,	01H	
 INT	21H	
 CMP	AL,	'0'	
+JLE	gError	
 CMP	AL,	'9'	
-MOV	AH,	01H	
+JG	gError	
 MOV	DL,	AL	
+SUB	AL,	48	
+RET	
 gError:	
 MOV	DL,	BEL	
+CALL	putChr	
+JMP	gLoop	
 getDgt	ENDP	
 END	

@@ -8,17 +8,18 @@
 #include <map>
 #include  <iomanip>
 #include  <assert.h>
+#include  <vector>
+
 #include <algorithm>
 
 using namespace std;
 stringstream ss;
 
 #include "opcode_proc.h"
-#include "opcode.h"
 #include "map_tbl.h"
 #include "misc_str.h"
 #include "data_segment.h"
-
+void jxx(char *pch,string J_hex);
 char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
 char pass2_name[]="pass2.txt";
@@ -32,7 +33,7 @@ fstream pass2;
 string final_str;
 int data_PC = 0;//data counter
 int code_PC = 0;//
-
+vector<string> ins_vec = {"MOV","CMP","SUB"};
 void pFinal()
 {
 
@@ -236,16 +237,12 @@ int main ()
             string pch_str(pch);
             if(op_tbl.find(pch_str) != op_tbl.end())
             {
-                if(!pch_str.compare("MOV"))
+                for(int i =0;i<ins_vec.size();i++)
                 {
-                    mnem = "MOV";
-                    break;
+                    if(!pch_str.compare(ins_vec[i]))
+                        mnem = ins_vec[i];
                 }
-                if(!pch_str.compare("CMP"))
-                {
-                    mnem = "CMP";
-                    break;
-                }
+                break;
             }
             if(!pch_str.compare("PROC"))
             {
@@ -258,13 +255,10 @@ int main ()
                 cout<<getPCstr(code_PC)<<"\t"<<str<<endl;
                 break;
             }
-            if(!pch_str.compare("CALL"))
+
+            if(tbl_find(jxx_tbl,pch_str))
             {
-                cout<<getPCstr(code_PC)<<"\t"<<"b8\t";
-                pch = strtok (NULL, " \t");
-                string name(pch);
-                cout<<name;
-                code_PC+=3;
+                jxx(pch,jxx_tbl[pch_str]);
                 break;
             }
             if(!pch_str.compare("INT"))
@@ -284,9 +278,17 @@ int main ()
                 }
             }
             if(!pch_str.compare("ENDP"))
+            {
+                cout<<getPCstr(code_PC)<<"\t"<<"ENDP";
                 break;
+            }
+
             if(!pch_str.compare("END"))
+            {
+                cout<<getPCstr(code_PC)<<"\t"<<"END";
                 break;
+            }
+
 
             pch = strtok (NULL, " \t");
             if(pch==NULL)
@@ -301,6 +303,7 @@ int main ()
         if( mnem !="0")
         {
            int opr_id = 0;
+           if(pch==NULL)
             cout<<getPCstr(code_PC)<<"\t";
           while (pch != NULL)
           {
@@ -319,7 +322,10 @@ int main ()
             }
           }
           if(opr_id==2)
+          {
             op_tbl[mnem](opr[0],opr[1]);
+
+          }
         }
 
           cout<<"\n";
@@ -332,4 +338,14 @@ int main ()
   return 0;
 
 }
-
+void jxx(char *pch,string J_hex)
+{
+    cout<<getPCstr(code_PC)<<"\t"<<J_hex<<"\t";
+    pch = strtok (NULL, " \t");
+    string name(pch);
+    cout<<name;
+    if(J_hex=="CALL")
+        code_PC+=3;
+    else
+        code_PC+=2;
+}

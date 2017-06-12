@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1497235344 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
+1497259591 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
 	<iostream>
 	<fstream>
 	<string.h>
@@ -11,25 +11,28 @@
 	<assert.h>
 	<algorithm>
 	"opcode_proc.h"
-	"opcode.h"
 	"map_tbl.h"
 	"misc_str.h"
 	"data_segment.h"
 
-1497086416 c:\users\a1989\desktop\fuji_asm_new\inc\opcode.h
+1497253188 c:\users\a1989\desktop\fuji_asm_new\inc\opcode.h
 	<string>
 	"opcode_proc.h"
 
 1497003332 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode.c
 	"opcode.h"
 
-1497234014 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
+1497260046 source:c:\users\a1989\desktop\fuji_asm_new\src\map_tbl.cpp
 	"map_tbl.h"
 	"opcode_proc.h"
-	"opcode.h"
 	"mov.h"
+	"cmp.h"
+	"add.h"
+	"sub.h"
+	"mul.h"
+	"div.h"
 
-1497230252 c:\users\a1989\desktop\fuji_asm_new\inc\map_tbl.h
+1497253365 c:\users\a1989\desktop\fuji_asm_new\inc\map_tbl.h
 	<map>
 	<string>
 
@@ -58,10 +61,10 @@
 	"opcode_proc.h"
 	<algorithm>
 
-1497235572 c:\users\a1989\desktop\fuji_asm_new\inc\mov.h
-	"opcode.h"
+1497259581 c:\users\a1989\desktop\fuji_asm_new\inc\mov.h
+	"opcode_proc.h"
 
-1497235566 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
+1497261373 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
 	"mov.h"
 
 1497167684 c:\users\a1989\desktop\fuji_asm_new\inc\misc_str.h
@@ -84,4 +87,31 @@
 	<string.h>
 	<sstream>
 	<fstream>
+
+1497252262 source:c:\users\a1989\desktop\fuji_asm_new\src\cmp.cpp
+	"cmp.h"
+
+1497259603 c:\users\a1989\desktop\fuji_asm_new\inc\cmp.h
+	"opcode_proc.h"
+
+1497254254 source:c:\users\a1989\desktop\fuji_asm_new\src\add.cpp
+	"add.h"
+
+1497254094 c:\users\a1989\desktop\fuji_asm_new\inc\add.h
+
+1497254272 source:c:\users\a1989\desktop\fuji_asm_new\src\div.cpp
+	"div.h"
+
+1497254094 c:\users\a1989\desktop\fuji_asm_new\inc\div.h
+
+1497254282 source:c:\users\a1989\desktop\fuji_asm_new\src\mul.cpp
+	"mul.h"
+
+1497254094 c:\users\a1989\desktop\fuji_asm_new\inc\mul.h
+
+1497259772 c:\users\a1989\desktop\fuji_asm_new\inc\sub.h
+	"opcode_proc.h"
+
+1497259979 source:c:\users\a1989\desktop\fuji_asm_new\src\sub.cpp
+	"sub.h"
 

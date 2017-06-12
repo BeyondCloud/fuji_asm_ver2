@@ -1,11 +1,15 @@
 #include "map_tbl.h"
 #include "opcode_proc.h"
-#include "opcode.h"
 #include "mov.h"
 #include "cmp.h"
+#include "add.h"
+#include "sub.h"
+#include "mul.h"
+#include "div.h"
 
 
 map<string, op_fp> op_tbl;
+map<string, string> jxx_tbl;
 map<string, string> reg32_tbl;
 map<string, string> reg16_tbl;
 map<string, string> reg8_tbl;
@@ -13,6 +17,8 @@ map<string, string> sreg_tbl;
 map<string, string> mod_tbl;
 map<string, string> equ_tbl;
 map<string, string> addr_tbl;
+
+
 void tbl_init()
 {
     reg32_tbl["EAX"] = "000";
@@ -47,11 +53,17 @@ void tbl_init()
     sreg_tbl["SS"] = "010";//8E d0
     sreg_tbl["DS"] = "011";//8E d8
 
-
+    jxx_tbl["JLE"] = "7e";
+    jxx_tbl["JG"]  = "7f";
+    jxx_tbl["JMP"] = "eb";
+    jxx_tbl["JMP"] = "eb";
+    jxx_tbl["JE"]  = "74";
+    jxx_tbl["CALL"]  = "e8";
 
 
     op_tbl["MOV"]= mov; //B8+r (r: register)
     op_tbl["CMP"]= cmp;//39C3 cmp %eax , %ebx
+    op_tbl["SUB"]= sub;
 
 
     /*
