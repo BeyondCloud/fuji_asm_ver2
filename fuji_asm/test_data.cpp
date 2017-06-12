@@ -92,7 +92,18 @@
            MOV    AH, 09H
            INT    21H
    mEnd:
+           CALL   NewLine
 
+   ;       Program exit
+           LEA    DX, Goodbye       ; Display goodbye message
+           MOV    AH, 09H
+
+           INT    21H
+   ;
+           MOV    AX,4C00H          ; Program exits using DOS service
+           INT    21H
+   ;
+   MAIN    ENDP
 
 
 
