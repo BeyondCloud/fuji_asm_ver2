@@ -241,8 +241,11 @@ int main ()
                     mnem = "MOV";
                     break;
                 }
-
-
+                if(!pch_str.compare("CMP"))
+                {
+                    mnem = "CMP";
+                    break;
+                }
             }
             if(!pch_str.compare("PROC"))
             {
@@ -263,6 +266,22 @@ int main ()
                 cout<<name;
                 code_PC+=3;
                 break;
+            }
+            if(!pch_str.compare("INT"))
+            {
+                pch = strtok (NULL, " \t");
+                string name(pch);
+                if(name[name.size()-1] == 'H')
+                {
+                    name = name.substr(0,name.size()-1);
+                    if(is_hex_str(name))
+                    {
+                        cout<<getPCstr(code_PC)<<"\t";
+                        cout<<"cd"<<name<<endl;
+                        code_PC+=2;
+                        break;
+                    }
+                }
             }
             if(!pch_str.compare("ENDP"))
                 break;

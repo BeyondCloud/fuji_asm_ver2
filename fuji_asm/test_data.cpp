@@ -21,6 +21,10 @@
                                     ; and convert to binary
    gLoop:  MOV    DL, '?'
            CALL   putChr
+           INT    21H
+           CMP    AL, '0'           ; Check for invalid input
+           CMP    AL, '9'
+          
            MOV    AH, 01H           ; Get user input with echo
            MOV    DL, AL
    gError:

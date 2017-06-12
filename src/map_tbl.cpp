@@ -2,6 +2,8 @@
 #include "opcode_proc.h"
 #include "opcode.h"
 #include "mov.h"
+#include "cmp.h"
+
 
 map<string, op_fp> op_tbl;
 map<string, string> reg32_tbl;
@@ -49,6 +51,7 @@ void tbl_init()
 
 
     op_tbl["MOV"]= mov; //B8+r (r: register)
+    op_tbl["CMP"]= cmp;//39C3 cmp %eax , %ebx
 
 
     /*
@@ -61,7 +64,6 @@ void tbl_init()
 
     //immediate address
 
-    op_tbl["cmp"]= cmp;//39C3 cmp %eax , %ebx
 
 
     op_tbl["jmp"]= ;//
