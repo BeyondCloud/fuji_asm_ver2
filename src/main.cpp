@@ -33,7 +33,7 @@ fstream pass2;
 string final_str;
 int data_PC = 0;//data counter
 int code_PC = 0;//
-vector<string> ins_vec = {"MOV","CMP","SUB"};
+vector<string> ins_vec = {"MOV","CMP","SUB","ADD","DEC"};
 void pFinal()
 {
 
@@ -256,9 +256,22 @@ int main ()
                 cout<<str<<endl;
                 break;
             }
-
+            if(!pch_str.compare("DB"))
+            {
+                pch = strtok (NULL," \t");
+                string name(pch);
+                if(name[name.size()-1]=='H')
+                {
+                    if(name.size()>2)
+                        name = name.substr(name.size()-3,2);
+                }
+                cout<<"DB\t"<<name<<endl;
+                code_PC+=1;
+                break;
+            }
             if(tbl_find(jxx_tbl,pch_str))
             {
+                cout<<pch_str<<"\t";
                 jxx(pch,jxx_tbl[pch_str]);
                 break;
             }
@@ -330,6 +343,10 @@ int main ()
           if(opr_id==2)
           {
             op_tbl[mnem](opr[0],opr[1]);
+          }else if(opr_id ==1)
+          {
+            opr[1]=NULL;
+            op_tbl[mnem](opr[0],opr[1]);
           }
         }
 
@@ -345,7 +362,7 @@ int main ()
 }
 void jxx(char *pch,string J_hex)
 {
-    cout<<getPCstr(code_PC)<<"\t"<<J_hex<<"\t";
+    cout<<"\t"<<J_hex<<"\t";
     pch = strtok (NULL, " \t");
     string name(pch);
     name = lowerCase(name);

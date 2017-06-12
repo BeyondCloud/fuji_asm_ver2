@@ -54,6 +54,35 @@
            RET
    NewLine ENDP                     ; End of Subroutine
 ;
+   doComp  PROC                     ; Subroutine to compute Sum of 1 .. n
+           MOV    AX, 0             ; at call register DL carries n
+           MOV    DH, 0
+   doLoop: CMP    DX, 0
+           JLE    doDone
+           ADD    AX, DX
+           DEC    DX
+           JMP    doLoop
+   doDone:                          ; Result is in AX (Two ASCII Chars)
+           DB     0D4H              ; Define the AAM instruction
+           DB     00AH
+           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
+           RET
+   doComp  ENDP                     ; End of Subroutine
+;
+   MAIN    PROC
+   ;------------------------------------------------------------------------
+   ;       PROLOGUE
+   ;------------------------------------------------------------------------
+   ;
+           MOV    AX, @DATA	    ; Set up DATA SEGMENT
+           MOV    DS, AX
+   ; Show message Start1
+           LEA    DX, Start1	    ; Display program start message
+           MOV    AH, 09H
+           INT    21H
 
-   
+
+
+
+
 END

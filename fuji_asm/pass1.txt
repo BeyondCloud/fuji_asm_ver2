@@ -35,4 +35,19 @@ CALL	putChr
 RET	
 NewLine	ENDP	
 
+doComp	PROC	
+MOV	AX,	0	
+MOV	DH,	0	
+doLoop:	CMP	DX,	0	
+JLE	doDone	
+ADD	AX,	DX	
+DEC	DX	
+JMP	doLoop	
+doDone:	
+DB	0D4H	
+DB	00AH	
+ADD	AX,	3030H	
+RET	
+doComp	ENDP	
+
 END	

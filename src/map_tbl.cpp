@@ -6,6 +6,7 @@
 #include "sub.h"
 #include "mul.h"
 #include "div.h"
+#include "dec.h"
 
 
 map<string, op_fp> op_tbl;
@@ -56,14 +57,17 @@ void tbl_init()
     jxx_tbl["JLE"] = "7e";
     jxx_tbl["JG"]  = "7f";
     jxx_tbl["JMP"] = "eb";
-    jxx_tbl["JMP"] = "eb";
     jxx_tbl["JE"]  = "74";
-    jxx_tbl["CALL"]  = "e8";
+    jxx_tbl["CALL"]= "e8";
 
 
-    op_tbl["MOV"]= mov; //B8+r (r: register)
-    op_tbl["CMP"]= cmp;//39C3 cmp %eax , %ebx
+    op_tbl["MOV"]= mov;
+    op_tbl["CMP"]= cmp;
     op_tbl["SUB"]= sub;
+    op_tbl["ADD"]= add;
+    op_tbl["DEC"]= dec;
+
+
 
 
     /*

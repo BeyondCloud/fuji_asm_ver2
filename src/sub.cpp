@@ -6,7 +6,6 @@ void sub(char *chp1, char *chp2)
     string str[2] ={string(chp1),string(chp2)};
 
     //determine oprand type
-    int opSrc_type,opDst_type;
     init_operand(str[0],opr1);
     init_operand(str[1],opr2);
 
@@ -27,6 +26,10 @@ void sub(char *chp1, char *chp2)
             opstr+=opr2.imm_bin_st;
         }
 
+    }
+    else
+    {
+        cout<<"no matching rule";
     }
     cout<<str_bin2hex(opstr.size()/4,opstr)<<"\t"<<opstr<<endl;
 

@@ -26,7 +26,7 @@ void mov(char *chp1, char *chp2)
         }
         else if(opr1.bits==16)
         {
-            code_PC+=4;
+            code_PC+=3;
             opstr="10111";
             opstr+=opr1.reg_val;
         }
