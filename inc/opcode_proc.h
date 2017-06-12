@@ -18,6 +18,8 @@ std::string string_to_hex(const std::string& input);
 std::string hex_to_string(const std::string& input);
 string lowerCase(string data);
 inline const char* h2b(char c);
+
+typedef enum{reg,sreg,mem,imm,N_A} type_t;
 struct oprand_t
 {
     string name; //ex: eax, ebx...
@@ -25,6 +27,14 @@ struct oprand_t
     int type;
     string imm_bin_st;
     string reg_val;//ex:000,001
+    void clear()
+    {
+        name = ""; //ex: eax, ebx...
+        bits = -1;
+        type = N_A;
+        imm_bin_st="";
+        reg_val="";//ex:000,001
+    }
 
 };
 bool is_hex_str(string str);
@@ -34,7 +44,6 @@ bool setup_imm(oprand_t &opr,string const& s,int bits);
 string str_bin2hex(int hex_len,string bin);
 bool is_number(const string& s);
 
-typedef enum{reg,sreg,mem,imm,N_A} type_t;
 
 void init_operand(string str,oprand_t &opr);
 

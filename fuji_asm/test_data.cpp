@@ -35,4 +35,25 @@
            CALL   putChr 
            JMP    gLoop
    getDgt  ENDP                     ; End of Subroutine
+;
+   putChr  PROC                     ; Subroutine to display a character
+                                    ; at call register DL carries the
+           CMP    DL, 0             ; character to be displayed
+           JE     NoMore            ; DL = 00 means end-of-string
+           MOV    AH, 02H
+           INT    21H
+   NoMore: 
+           RET
+   putChr  ENDP                     ; End of Subroutine
+;
+   NewLine PROC                     ; Subroutine to start a new line
+           MOV    DL, CR
+           CALL   putChr
+           MOV    DL, LF
+           CALL   putChr
+           RET
+   NewLine ENDP                     ; End of Subroutine
+;
+
+   
 END

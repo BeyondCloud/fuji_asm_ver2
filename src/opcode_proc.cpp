@@ -172,6 +172,8 @@ string str_bin2hex(int hex_len,string bin)
 }
 void init_operand(string str,oprand_t &opr)
 {
+    opr.clear();
+
     opr.name = str;
     if(tbl_find(reg32_tbl,str))
     {

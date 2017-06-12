@@ -348,6 +348,7 @@ void jxx(char *pch,string J_hex)
     cout<<getPCstr(code_PC)<<"\t"<<J_hex<<"\t";
     pch = strtok (NULL, " \t");
     string name(pch);
+    name = lowerCase(name);
     cout<<name;
     if(J_hex=="e8")//CALL
         code_PC+=3;

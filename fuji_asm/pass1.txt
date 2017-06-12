@@ -16,4 +16,23 @@ MOV	DL,	BEL
 CALL	putChr	
 JMP	gLoop	
 getDgt	ENDP	
+
+putChr	PROC	
+
+CMP	DL,	0	
+JE	NoMore	
+MOV	AH,	02H	
+INT	21H	
+NoMore:	
+RET	
+putChr	ENDP	
+
+NewLine	PROC	
+MOV	DL,	CR	
+CALL	putChr	
+MOV	DL,	LF	
+CALL	putChr	
+RET	
+NewLine	ENDP	
+
 END	
