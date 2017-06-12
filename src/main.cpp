@@ -122,6 +122,7 @@ void data_seg()
                 {
                     isNewAddr = false;
                 }
+
                 pch = strtok (NULL," \t,"); //remove DB
 
                 string result;
@@ -157,20 +158,35 @@ void data_seg()
                 }
               //  printPC(data_PC);
               cout<<endl;
+                if(isNewAddr)
+                {
+                    name= lowerCase(name);
+                    cout<<"  tbl:"<<name<<">"<<getPCstr(data_PC)<<endl;
+                    data_tbl[name] =getPCstr(data_PC);
+                }
                 data_PC+= (result.size()/2);
                 cout<<result;
                 printPC(data_PC);
                 name = lowerCase(name);
-                if(isNewAddr)
-                    addr_tbl[name] =getPCstr(data_PC);
+
                 break;
                 //cout<<lowerCase(name);
                 //for(;;){}
             }
             else if(pch_str == "DW")
             {
-                pch = strtok (NULL," \t$-");//remove name
+                strcpy(str,line.c_str());
+                pch = strtok(str," \t");
+                string name(pch);
+                pch = strtok(NULL," \t,");//remove DW
+                pch = strtok (NULL," \t$-");
                 string s(pch);
+                if(isNewAddr)
+                {
+                    name= lowerCase(name);
+                    data_tbl[name] =getPCstr(data_PC);
+                   // data_PC+=2;
+                }
                 if(is_number(s))
                 {
                     int num;
@@ -183,14 +199,17 @@ void data_seg()
                 }
                 s = lowerCase(s);
 
-                if(tbl_find(addr_tbl,s))
+                if(tbl_find(data_tbl,s))
                 {
-                    cout<<addr_tbl[s];
-                    data_PC+=2;
+                    cout<<data_tbl[s];
                     printPC(data_PC);
+                    data_PC+=2;
+
                 }
+
                 break;
             }
+
             pch = strtok (NULL," \t,");
 
         }

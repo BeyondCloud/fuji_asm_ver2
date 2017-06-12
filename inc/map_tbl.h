@@ -16,7 +16,7 @@ extern map<string, string> sreg_tbl;
 extern map<string, string> mod_tbl;
 
 extern map<string, string> equ_tbl;
-extern map<string, string> addr_tbl;//record addr of function,4 hex
+extern map<string, string> data_tbl;//record addr of function,4 hex
 
 //map<string, op_fp>::iterator iter;
 //eax 000 , ebx 011 ,ecx 001 ,edx  010
