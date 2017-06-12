@@ -17,6 +17,7 @@ stringstream ss;
 #include "opcode.h"
 #include "map_tbl.h"
 #include "misc_str.h"
+#include "data_segment.h"
 
 char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
@@ -47,179 +48,11 @@ void pFinal()
         cout<<final_str[i];
     }
 }
-void printPC(int pc)
-{
-     cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
-}
-string getPCstr(const int pc)
-{
-    ss.str("");
-    ss<<hex<<setw(4)<<setfill('0')<<pc;
-    return ss.str();
-}
-char last_letter(char *str)
-{
-  int len = strlen(str);
-  return len > 0 ? *(str + len - 1 ): *str;
-}
-string lowerCase(string data)
-{
-    transform(data.begin(), data.end(), data.begin(), ::tolower);
-    return data;
-}
-void data_seg()
-{
-    string line;
-    char str[128];
-    char *pch;
-    printPC(data_PC);
-    bool isNewAddr = true;
-    while ( getline (org_in,line) )
-    {
-        isNewAddr = true;
-        strcpy(str,line.c_str());
-        if(str[0]=='.') //exit data field
-            break;
-        pch = strtok (str," \t,");
-        if(pch==NULL)   //avoid empty line
-            continue;
 
-        while(1)
-        {
-
-            if(pch==NULL)
-                break;
-            string pch_str(pch);
-            if(pch_str == "DB")
-            {
-                strcpy(str,line.c_str());
-                bool strREC= false;
-                string scan1;
-                //expand "xxx",'x' to ascii HEX code
-                for(int i=0;i<line.size();i++)
-                {
-                    if(str[i] == '\"'|| str[i] == '\'')
-                    {
-                        strREC = !strREC;
-                        continue;
-                    }
-                    if(strREC)
-                    {
-                        string asc;
-                        asc+=str[i];
-                        scan1+= string_to_hex(asc);
-
-                    }else
-                    {
-                        scan1+=str[i];
-                    }
-                }
-                strcpy(str,scan1.c_str());
-              //  cout<<endl<<"scan1:"<<str;
-                pch = strtok (str," \t,");//remove name
-                string name(pch);
-                if(name == "DB" ||name == "DW")
-                {
-                    isNewAddr = false;
-                }
-
-                pch = strtok (NULL," \t,"); //remove DB
-
-                string result;
-                if(isNewAddr)
-                    pch = strtok (NULL," \t,");
-                while(pch!=NULL)
-                {
-
-                    string st(pch);
-                    if(tbl_find(equ_tbl,st))
-                    {
-                        //result +=equ_tbl[st];
-                        string tmp = equ_tbl[st];
-                        if (tmp[tmp.size()-1] == 'H')
-                        {
-                            string noH = tmp.substr(0,tmp.size()-1);
-                            if(is_hex_str(noH))
-                                result+=noH;
-                        }
-
-                    }
-                    else if(is_number(st))
-                    {
-                        int num;
-                        ss.str("");
-                        ss << hex << setfill('0')<<setw(2)<<st;
-                        result +=ss.str();
-                    }
-                    else
-                        result+=pch;
-                    pch = strtok (NULL," \t,");
-
-                }
-              //  printPC(data_PC);
-              cout<<endl;
-                if(isNewAddr)
-                {
-                    name= lowerCase(name);
-                    cout<<"  tbl:"<<name<<">"<<getPCstr(data_PC)<<endl;
-                    data_tbl[name] =getPCstr(data_PC);
-                }
-                data_PC+= (result.size()/2);
-                cout<<result;
-                printPC(data_PC);
-                name = lowerCase(name);
-
-                break;
-                //cout<<lowerCase(name);
-                //for(;;){}
-            }
-            else if(pch_str == "DW")
-            {
-                strcpy(str,line.c_str());
-                pch = strtok(str," \t");
-                string name(pch);
-                pch = strtok(NULL," \t,");//remove DW
-                pch = strtok (NULL," \t$-");
-                string s(pch);
-                if(isNewAddr)
-                {
-                    name= lowerCase(name);
-                    data_tbl[name] =getPCstr(data_PC);
-                   // data_PC+=2;
-                }
-                if(is_number(s))
-                {
-                    int num;
-                    ss.str("");
-                    ss << hex << setfill('0')<<setw(4)<<s;
-                    data_PC+=2;
-                    cout<<ss.str();
-                    printPC(data_PC);
-                    break;
-                }
-                s = lowerCase(s);
-
-                if(tbl_find(data_tbl,s))
-                {
-                    cout<<data_tbl[s];
-                    printPC(data_PC);
-                    data_PC+=2;
-
-                }
-
-                break;
-            }
-
-            pch = strtok (NULL," \t,");
-
-        }
-    }
-    for(;;){}
-}
 
 int main ()
 {
-
+/*
     final_str = "80";
     ss.str("");
     ss << hex << setfill('0')<<setw(2)<<ident.size()+2;
@@ -233,7 +66,7 @@ int main ()
     final_str+=init_str;
     final_str+=stack_size_str;
     final_str+=after_stack_size_str;
-
+*/
 
 
   //  pFinal();
@@ -261,9 +94,8 @@ int main ()
      //   cout<<endl<<"l:"<<line<<endl;
         pass_out = true;
         strcpy(str,line.c_str());
-        pch = strtok (str," \t,");
-        //avoid space
-        if(pch==NULL)
+        pch = strtok (str," \t,");   //first word
+        if(pch==NULL)   //avoid empty line
             continue;
         string pch_str(pch);
         //init segment
@@ -285,13 +117,18 @@ int main ()
                 }
             }
             else if(pch_str=="DATA")
+            {
                 data_seg();
+               continue;
+            }
             pass_out = false;
         }
-        //init EQU table
+
         do
         {
             string find_equ_str(pch);
+            if(find_equ_str[0]==';')
+                break;
             if(!find_equ_str.compare("EQU"))
             {
 
@@ -303,14 +140,21 @@ int main ()
                 pch = strtok (NULL, " \t");
                 string to_name(pch);
                 equ_tbl[def_name]=to_name;
+                cout<<" equ tbl:"<<def_name<<">"<<to_name<<endl;
+
                 pass_out = false;
                 break;
 
+            }else if(!find_equ_str.compare("PROC"))
+            {
+                cout<<"proc detect\n";
             }
             cout<<pch<<"\t";
             pch = strtok (NULL, " \t");
 
+
         }while(pch!= NULL);
+
 
         if(pass_out)
         {
@@ -328,6 +172,7 @@ int main ()
 
         cout<<endl;
     }
+    cout<<"end";
     org_in.close();
     pass1.close();
 

@@ -1,7 +1,22 @@
 #include "opcode_proc.h"
-
+#include <algorithm>
 using namespace std;
 oprand_t opr1,opr2;
+void printPC(int pc)
+{
+     cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
+}
+string getPCstr(const int pc)
+{
+    stringstream ss;
+    ss<<hex<<setw(4)<<setfill('0')<<pc;
+    return ss.str();
+}
+char last_letter(char *str)
+{
+  int len = strlen(str);
+  return len > 0 ? *(str + len - 1 ): *str;
+}
 bool is_hex_str(string str)
 {
     return (str.find_first_not_of("0123456789ABCDEFabcdef", 0) == string::npos);
@@ -21,7 +36,11 @@ std::string string_to_hex(const std::string& input)
     }
     return output;
 }
-
+string lowerCase(string data)
+{
+    transform(data.begin(), data.end(), data.begin(), ::tolower);
+    return data;
+}
 std::string hex_to_string(const std::string& input)
 {
     static const char* const lut = "0123456789ABCDEF";

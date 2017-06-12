@@ -11,8 +11,12 @@
 #include <string.h>
 #include <stdexcept>
 using namespace std;
+void printPC(int pc);
+string getPCstr(const int pc);
+char last_letter(char *str);
 std::string string_to_hex(const std::string& input);
 std::string hex_to_string(const std::string& input);
+string lowerCase(string data);
 inline const char* h2b(char c);
 struct oprand_t
 {
