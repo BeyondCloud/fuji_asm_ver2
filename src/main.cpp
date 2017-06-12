@@ -21,12 +21,18 @@ stringstream ss;
 
 char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
+char pass2_name[]="pass2.txt";
+
 string ident = "uASM-TV01S.ASM";
 fstream org_in;
 fstream pass1;
+fstream pass2;
+
 
 string final_str;
-int data_PC = 0;//program counter
+int data_PC = 0;//data counter
+int code_PC = 0;//
+
 void pFinal()
 {
 
@@ -145,13 +151,9 @@ int main ()
                 pass_out = false;
                 break;
 
-            }else if(!find_equ_str.compare("PROC"))
-            {
-                cout<<"proc detect\n";
             }
             cout<<pch<<"\t";
             pch = strtok (NULL, " \t");
-
 
         }while(pch!= NULL);
 
@@ -172,17 +174,22 @@ int main ()
 
         cout<<endl;
     }
-    cout<<"end";
     org_in.close();
     pass1.close();
 
 
-    return 0;
-
+ //   return 0;
     pass1.open("pass1.txt",ios::in);
+    pass2.open("pass2.txt",ios::out);
+
     if(!pass1)
     {
         cout<<"cannot open pass1 file";
+        return 0;
+    }
+    if(!pass2)
+    {
+        cout<<"cannot open pass2 file";
         return 0;
     }
     //return to file start
@@ -204,35 +211,78 @@ int main ()
 
     while ( getline (pass1,line) )
     {
-      strcpy(str,line.c_str());
+        mnem = "0";
+        strcpy(str,line.c_str());
         pch = strtok (str," \t,");
-      //match opcode
-      while(1)
-      {
-        if(pch==NULL)
-        {
-            cout<<line<<" fail to match\n";
-            break;
-        }
+        if(pch==NULL)   //avoid empty line
+            continue;
+        //match opcode
         string pch_str(pch);
-        if(op_tbl.find(pch_str) != op_tbl.end())
+        if(pch_str[pch_str.size()-1] == ':')
         {
-            if(!pch_str.compare("MOV"))
+            //remove last ':'
+            string name = pch_str.substr(0,pch_str.size()-1);
+            name = lowerCase(name);
+            cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
+            addr_tbl[name] =getPCstr(code_PC);
+            cout<<getPCstr(code_PC)<<"\t"<<str<<endl;
+             pch = strtok (NULL," \t,");
+             if(pch == NULL)
+                continue;
+        }
+        while(1)
+        {
+
+            string pch_str(pch);
+            if(op_tbl.find(pch_str) != op_tbl.end())
             {
-                mnem = "MOV";
+                if(!pch_str.compare("MOV"))
+                {
+                    mnem = "MOV";
+                    break;
+                }
+
+
+            }
+            if(!pch_str.compare("PROC"))
+            {
+                strcpy(str,line.c_str());
+                pch = strtok (str," \t");
+                string name(pch);
+                name= lowerCase(name);
+                cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
+                addr_tbl[name] =getPCstr(code_PC);
+                cout<<getPCstr(code_PC)<<"\t"<<str<<endl;
                 break;
             }
+            if(!pch_str.compare("CALL"))
+            {
+                cout<<getPCstr(code_PC)<<"\t"<<"b8\t";
+                pch = strtok (NULL, " \t");
+                string name(pch);
+                cout<<name;
+                code_PC+=3;
+                break;
+            }
+            if(!pch_str.compare("ENDP"))
+                break;
+            if(!pch_str.compare("END"))
+                break;
+
+            pch = strtok (NULL, " \t");
+            if(pch==NULL)
+            {
+                cout<<line<<" fail to match\n";
+                break;
+            }
+
         }
+        //match oprand
 
-        pch = strtok (NULL, " \t");
-
-      }
-       //match oprand
-
-       if( mnem !="0")
-       {
+        if( mnem !="0")
+        {
            int opr_id = 0;
-
+            cout<<getPCstr(code_PC)<<"\t";
           while (pch != NULL)
           {
 
@@ -251,11 +301,13 @@ int main ()
           }
           if(opr_id==2)
             op_tbl[mnem](opr[0],opr[1]);
-       }
+        }
 
-      cout<<"\n";
+          cout<<"\n";
     }
+
     pass1.close();
+    pass2.close();
 
 
   return 0;

@@ -2,4 +2,5 @@
 #define __MOV_H
 #include "opcode.h"
 void mov(char *chp1, char *chp2);
+extern int code_PC;
 #endif

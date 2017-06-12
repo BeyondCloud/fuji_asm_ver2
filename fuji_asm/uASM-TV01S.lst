@@ -54,6 +54,7 @@
  0011  8A D0			           MOV    DL, AL
  0013  2C 30			           SUB    AL, 48            ; Convert ASCII to decimal binary
  0015  C3			           RET
+ 
  0016				   gError:
  0016  B2 07			           MOV    DL, BEL           ; Error alert
 				          

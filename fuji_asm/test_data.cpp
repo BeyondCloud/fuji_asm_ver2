@@ -22,17 +22,8 @@
    gLoop:  MOV    DL, '?'
            CALL   putChr
            MOV    AH, 01H           ; Get user input with echo
-           INT    21H
-           CMP    AL, '0'           ; Check for invalid input
-           JLE    gError
-           CMP    AL, '9'
-           JG     gError
            MOV    DL, AL
-           SUB    AL, 48            ; Convert ASCII to decimal binary
-           RET
    gError:
            MOV    DL, BEL           ; Error alert
-           CALL   putChr 
-           JMP    gLoop
    getDgt  ENDP                     ; End of Subroutine
 END

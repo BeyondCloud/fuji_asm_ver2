@@ -20,11 +20,13 @@ void mov(char *chp1, char *chp2)
     {
         if(opr1.bits==8)
         {
+            code_PC+=2;
             opstr="10110";
             opstr+=opr1.reg_val;
         }
         else if(opr1.bits==16)
         {
+            code_PC+=4;
             opstr="10111";
             opstr+=opr1.reg_val;
         }
