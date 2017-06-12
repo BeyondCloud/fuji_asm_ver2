@@ -219,6 +219,7 @@ int main ()
             continue;
         //match opcode
         string pch_str(pch);
+        cout<<getPCstr(code_PC)<<"\t";
         if(pch_str[pch_str.size()-1] == ':')
         {
             //remove last ':'
@@ -252,7 +253,7 @@ int main ()
                 name= lowerCase(name);
                 cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
                 addr_tbl[name] =getPCstr(code_PC);
-                cout<<getPCstr(code_PC)<<"\t"<<str<<endl;
+                cout<<str<<endl;
                 break;
             }
 
@@ -270,22 +271,27 @@ int main ()
                     name = name.substr(0,name.size()-1);
                     if(is_hex_str(name))
                     {
-                        cout<<getPCstr(code_PC)<<"\t";
                         cout<<"cd"<<name<<endl;
                         code_PC+=2;
                         break;
                     }
                 }
             }
+            if(!pch_str.compare("RET"))
+            {
+                cout<<"RET\tc3";
+                code_PC+=1;
+                break;
+            }
             if(!pch_str.compare("ENDP"))
             {
-                cout<<getPCstr(code_PC)<<"\t"<<"ENDP";
+                cout<<"ENDP";
                 break;
             }
 
             if(!pch_str.compare("END"))
             {
-                cout<<getPCstr(code_PC)<<"\t"<<"END";
+                cout<<"END";
                 break;
             }
 
@@ -324,7 +330,6 @@ int main ()
           if(opr_id==2)
           {
             op_tbl[mnem](opr[0],opr[1]);
-
           }
         }
 
@@ -344,7 +349,7 @@ void jxx(char *pch,string J_hex)
     pch = strtok (NULL, " \t");
     string name(pch);
     cout<<name;
-    if(J_hex=="CALL")
+    if(J_hex=="e8")//CALL
         code_PC+=3;
     else
         code_PC+=2;

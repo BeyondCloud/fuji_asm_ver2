@@ -18,7 +18,10 @@ void sub(char *chp1, char *chp2)
         if(opr1.reg_val=="000")
         {
             if(opr1.bits == 8)
-                opstr+="00111100";//2C
+            {
+                opstr+="00101100";//2C
+                code_PC+=2;
+            }
             else
                 opstr+="00111101";//2D
             opstr+=opr2.imm_bin_st;

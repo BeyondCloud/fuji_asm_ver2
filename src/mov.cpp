@@ -41,9 +41,9 @@ void mov(char *chp1, char *chp2)
     {
         if(opr1.bits==8 &&opr2.bits==8)
         {
+            code_PC+=2;
             opstr="10001010";//8A,
             opstr+="11";
-
             opstr+=opr1.reg_val;
             opstr+=opr2.reg_val;
        //     opstr+=bitset<8>opr2.imm_bin_st;
