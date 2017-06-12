@@ -113,7 +113,17 @@
            CALL   NewLine
 
    ;       Program exit
-           LEA    DX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           LEA    CX, Goodbye       ; Display goodbye message
+           
            MOV    AH, 09H
 
            INT    21H

@@ -80,7 +80,18 @@
            LEA    DX, Start1	    ; Display program start message
            MOV    AH, 09H
            INT    21H
-
+   ;
+   mStart: CALL   NewLine
+           Call   getDgt
+           MOV    uIdgt, DL
+           MOV    DL, AL
+           CALL   doComp
+           XCHG   AH, AL
+           MOV    uRval, AX
+           LEA    DX, uMSG	    ; Display result message
+           MOV    AH, 09H
+           INT    21H
+   mEnd:
 
 
 
