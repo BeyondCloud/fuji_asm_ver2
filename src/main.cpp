@@ -31,6 +31,7 @@ string ident = "uASM-TV01S.ASM";
 fstream org_in;
 fstream pass1;
 fstream pass2;
+fstream p2_addr;
 
 fstream lst_out;
 
@@ -84,6 +85,9 @@ int main ()
 
   //  pFinal();
   //  return 0;
+
+
+
 
     tbl_init();
     string line;
@@ -213,10 +217,13 @@ int main ()
             {
                 if(str[str.size()-1]==':')
                 {
+                    pass1<<str<<"\t";
 
                      pch = strtok (NULL," \t,");
+
                      if(pch==NULL ||pch[0]==';')
                         is_out[is_out_i] =false;
+
                 }
                 while(pch!=NULL)
                 {
@@ -392,6 +399,7 @@ int main ()
                 name = lowerCase(name);
                 printHex(opstr);
                 pass2<<"\t"<<name;
+                pass2<<"\t4_";
                 break;
             }
             if(!pch_str.compare("RET"))
@@ -473,10 +481,74 @@ int main ()
     pass1.close();
     pass2.close();
     pass2.open("pass2.txt",ios::in);
+    p2_addr.open("p2_addr.txt",ios::out);
+    string j_to = "";
+    string j_from = "";
+    int j_len = 0;
+
+    while ( getline (pass2,line_p2) )
+    {
+        if(j_len != 0)
+        {
+            strcpy(str,line_p2.c_str());
+            pch = strtok (str,"\t");
+            string pch_str(pch);
+            j_from = pch_str;
+            string r_addr = subHexStr(j_to,j_from,j_len);
+            p2_addr<<r_addr<<"\t";
+            p2_addr<<"f:"<<j_from<<"\t";
+            p2_addr<<"t:"<<j_to<<endl;
+
+
+            j_from ="";
+            j_to = "";
+            j_len = 0;
+        }
+        if(line_p2[line_p2.size()-1] == '<')
+        {
+            strcpy(str,line_p2.c_str());
+            pch = strtok (str,"\t"); //PC
+            p2_addr<<pch<<"\t";
+            pch = strtok (NULL,"\t");
+            p2_addr<<pch<<"\t";
+            pch = strtok (NULL,"\t"); //OP
+            string pch_str(pch);
+            if(tbl_find(addr_tbl,pch_str))
+            {
+                j_to = addr_tbl[pch_str];
+            }
+            else
+            {
+                cout<<pch_str<<":pass2 tbl not found!"<<endl;
+            }
+            pch = strtok (NULL,"\t"); //len
+            string len(pch);
+            j_len = stoi(len);
+        }
+        else
+             p2_addr<<line_p2<<endl;
+
+        /*
+        else if(line_p2[line_p2.size()-1] == '_')
+        {
+            strcpy(str,line_p2.c_str());
+            strtok (str,"\t"); //PC
+            strtok (NULL,"\t"); //OP
+            pch = strtok (NULL,"\t");
+            string pch_str(pch);
+            cout<<pch_str<<endl;
+        }
+        */
+    }
+
+
    // lst_out.open("lst.txt",ios::out);
 
+    //return 0;
     org_in.clear();
     org_in.seekg(0, ios::beg);
+    pass2.clear();
+    pass2.seekg(0, ios::beg);
     is_out_i=1;
     while ( getline (org_in,line_org) )
     {
@@ -499,11 +571,19 @@ void jxx(char *pch,string J_hex)
     cout<<J_hex;
     pass2<<J_hex;
 
-    if(J_hex=="e8")//CALL
-        code_PC+=3;
-    else
-        code_PC+=2;
     string name(pch);
     pass2<<"\t"<<lowerCase(name);
+    if(J_hex=="e8")//CALL
+    {
+        code_PC+=3;
+        pass2<<"\t4<";
+    }
+    else
+    {
+        code_PC+=2;
+        pass2<<"\t2<";
+    }
+
+
 
 }

@@ -32,42 +32,42 @@
 .CODE
 0000	   getDgt  PROC                     ; Subroutine to get a decimal digit
 0000	b23f   gLoop:  MOV    DL, '?'
-0002	e8	putchr           CALL   putChr
+0002	e8	putchr	4<           CALL   putChr
 0005	b401           MOV    AH, 01H           ; Get user input with echo
 0007	cd21           INT    21H
 0009	3c30           CMP    AL, '0'           ; Check for invalid input
-000b	7e	gerror           JLE    gError
+000b	7e	gerror	2<           JLE    gError
 000d	3c39           CMP    AL, '9'
-000f	7f	gerror           JG     gError
+000f	7f	gerror	2<           JG     gError
 0011	8ad0           MOV    DL, AL
 0013	2c30           SUB    AL, 48            ; Convert ASCII to decimal binary
 0015	c3           RET
 0016	b207           MOV    DL, BEL           ; Error alert
-0018	e8	putchr           CALL   putChr 
-001b	eb	gloop           JMP    gLoop
+0018	e8	putchr	4<           CALL   putChr 
+001b	eb	gloop	2<           JMP    gLoop
 001d		   getDgt  ENDP                     ; End of Subroutine
 001d	   putChr  PROC                     ; Subroutine to display a character
 001d	80fa00           CMP    DL, 0             ; character to be displayed
-0020	74	nomore           JE     NoMore            ; DL = 00 means end-of-string
+0020	74	nomore	2<           JE     NoMore            ; DL = 00 means end-of-string
 0022	b402           MOV    AH, 02H
 0024	cd21           INT    21H
 0026	c3           RET
 0027		   putChr  ENDP                     ; End of Subroutine
 0027	   NewLine PROC                     ; Subroutine to start a new line
 0027	b20d           MOV    DL, CR
-0029	e8	putchr           CALL   putChr
+0029	e8	putchr	4<           CALL   putChr
 002c	b20a           MOV    DL, LF
-002e	e8	putchr           CALL   putChr
+002e	e8	putchr	4<           CALL   putChr
 0031	c3           RET
 0032		   NewLine ENDP                     ; End of Subroutine
 0032	   doComp  PROC                     ; Subroutine to compute Sum of 1 .. n
 0032	b80000           MOV    AX, 0             ; at call register DL carries n
 0035	b600           MOV    DH, 0
 0037	83fa0000   doLoop: CMP    DX, 0
-003a	7e	dodone           JLE    doDone
+003a	7e	dodone	2<           JLE    doDone
 003c	03c2           ADD    AX, DX
 003e	4a           DEC    DX
-003f	eb	doloop           JMP    doLoop
+003f	eb	doloop	2<           JMP    doLoop
 0041	d4           DB     0D4H              ; Define the AAM instruction
 0042	0a           DB     00AH
 0043	053030           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
@@ -76,21 +76,21 @@
 0047	   MAIN    PROC
 0047	b80000           MOV    AX, @DATA     ; Set up DATA SEGMENT
 004a	8ed8           MOV    DS, AX
-004c	8d16	start1           LEA    DX, Start1      ; Display program start message
+004c	8d16	start1	4_           LEA    DX, Start1      ; Display program start message
 0050	b409           MOV    AH, 09H
 0052	cd21           INT    21H
-0054	e8	newline   mStart: CALL   NewLine
-0057	e8	getdgt           Call   getDgt
+0054	e8	newline	4<   mStart: CALL   NewLine
+0057	e8	getdgt	4<           Call   getDgt
 005a	8816005a           MOV    uIdgt, DL
 005e	8ad0           MOV    DL, AL
-0060	e8	docomp           CALL   doComp
+0060	e8	docomp	4<           CALL   doComp
 0063	86e0           XCHG   AH, AL
 0065	a3005f           MOV    uRval, AX
-0068	8d16	umsg           LEA    DX, uMSG      ; Display result message
+0068	8d16	umsg	4_           LEA    DX, uMSG      ; Display result message
 006c	b409           MOV    AH, 09H
 006e	cd21           INT    21H
-0070	e8	newline           CALL   NewLine
-0073	8d16	goodbye           LEA    DX, Goodbye       ; Display goodbye message
+0070	e8	newline	4<           CALL   NewLine
+0073	8d16	goodbye	4_           LEA    DX, Goodbye       ; Display goodbye message
 0077	b409           MOV    AH, 09H
 0079	cd21           INT    21H
 007b	b84c00           MOV    AX,4C00H          ; Program exits using DOS service
