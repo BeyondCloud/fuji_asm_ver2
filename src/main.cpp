@@ -31,6 +31,7 @@ string ident = "uASM-TV01S.ASM";
 fstream org_in;
 fstream pass1;
 fstream pass2;
+
 fstream lst_out;
 
 string final_str;
@@ -203,12 +204,17 @@ int main ()
             strcpy(str,line.c_str());
 
             pch = strtok (str," \t,");
+            string str(pch);
             if(pch[0]==';')
             {
                 is_out[is_out_i] =false;
             }
             else
             {
+                if(str[str.size()-1]==':')
+                {
+                     is_out[is_out_i] =false;
+                }
                 while(pch!=NULL)
                 {
                     if(pch[0]==';')
@@ -349,7 +355,6 @@ int main ()
             if(tbl_find(jxx_tbl,pch_str))
             {
                 jxx(pch,jxx_tbl[pch_str]);
-
                 break;
             }
             if(!pch_str.compare("INT"))
@@ -383,7 +388,7 @@ int main ()
                 string name(pch);
                 name = lowerCase(name);
                 printHex(opstr);
-                //cout<<"\t"<<name<<endl;
+                pass2<<"\t"<<name<<endl;
                 break;
             }
             if(!pch_str.compare("RET"))
@@ -495,4 +500,7 @@ void jxx(char *pch,string J_hex)
         code_PC+=3;
     else
         code_PC+=2;
+    string name(pch);
+    pass2<<"\t"<<lowerCase(name);
+
 }
