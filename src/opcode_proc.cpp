@@ -4,7 +4,10 @@ using namespace std;
 oprand_t opr1,opr2;
 void printHex(string str)
 {
-    cout<<str_bin2hex(str.size()/4,str);
+    string hex_str  = str_bin2hex(str.size()/4,str);
+    cout<<hex_str;
+    lst_out<<hex_str;
+
 }
 void printPC(int pc)
 {

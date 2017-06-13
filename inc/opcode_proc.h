@@ -10,6 +10,7 @@
 #include <iomanip>
 #include <string.h>
 #include <stdexcept>
+#include <fstream>
 using namespace std;
 void printHex(string str);
 void printPC(int pc);
@@ -21,6 +22,7 @@ std::string hex_to_string(const std::string& input);
 string upperCase(string data);
 string lowerCase(string data);
 inline const char* h2b(char c);
+extern fstream lst_out;
 
 typedef enum{reg,sreg,mem,imm,addr,N_A} type_t;
 struct oprand_t

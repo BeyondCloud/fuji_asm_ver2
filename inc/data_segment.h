@@ -8,6 +8,6 @@ extern int data_PC;
 extern stringstream ss;
 extern fstream org_in;
 extern fstream lst_out;
-
-void data_seg();
+extern int is_out_i;
+string data_seg();
 #endif

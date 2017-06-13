@@ -10,7 +10,7 @@
 #include <algorithm>
 #include "opcode_proc.h"
 
-void data_seg()
+string data_seg()
 {
     string line;
     char str[128];
@@ -19,12 +19,18 @@ void data_seg()
     int old_dataPC;
     while ( getline (org_in,line) )
     {
+        is_out_i++;
         old_dataPC = data_PC;
         isNewAddr = true;
         string result;//use for storing long string hex code
         strcpy(str,line.c_str());
         if(str[0]=='.') //exit data field
+        {
+            string pch_str(str);
+            pch_str = pch_str.substr(1,pch_str.size()-1);
+            return pch_str;
             break;
+        }
         pch = strtok (str," \t,");
         if(pch==NULL)   //avoid empty line
             continue;
@@ -93,7 +99,6 @@ void data_seg()
                     }
                     else if(is_number(st))
                     {
-                        int num;
                         ss.str("");
                         ss << hex << setfill('0')<<setw(2)<<st;
                         result +=ss.str();
@@ -136,7 +141,6 @@ void data_seg()
                 }
                 if(is_number(s))
                 {
-                    int num;
                     ss.str("");
                     ss << hex << setfill('0')<<setw(4)<<s;
                     data_PC+=2;
@@ -160,4 +164,5 @@ void data_seg()
         lst_out<<line<<endl;
 
     }
+    return "END";
 }

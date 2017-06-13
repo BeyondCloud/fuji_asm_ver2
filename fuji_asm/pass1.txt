@@ -1,5 +1,4 @@
 getDgt	PROC	
-
 gLoop:	MOV	DL,	'?'	
 CALL	putChr	
 MOV	AH,	01H	
@@ -16,9 +15,7 @@ MOV	DL,	BEL
 CALL	putChr	
 JMP	gLoop	
 getDgt	ENDP	
-
 putChr	PROC	
-
 CMP	DL,	0	
 JE	NoMore	
 MOV	AH,	02H	
@@ -26,7 +23,6 @@ INT	21H
 NoMore:	
 RET	
 putChr	ENDP	
-
 NewLine	PROC	
 MOV	DL,	CR	
 CALL	putChr	
@@ -34,7 +30,6 @@ MOV	DL,	LF
 CALL	putChr	
 RET	
 NewLine	ENDP	
-
 doComp	PROC	
 MOV	AX,	0	
 MOV	DH,	0	
@@ -49,19 +44,12 @@ DB	00AH
 ADD	AX,	3030H	
 RET	
 doComp	ENDP	
-
 MAIN	PROC	
-
-
-
-
 MOV	AX,	@DATA	
 MOV	DS,	AX	
-
 LEA	DX,	Start1	
 MOV	AH,	09H	
 INT	21H	
-
 mStart:	CALL	NewLine	
 Call	getDgt	
 MOV	uIdgt,	DL	
@@ -74,13 +62,10 @@ MOV	AH,	09H
 INT	21H	
 mEnd:	
 CALL	NewLine	
-
 LEA	DX,	Goodbye	
 MOV	AH,	09H	
 INT	21H	
-
 MOV	AX,4C00H	
 INT	21H	
-
 MAIN	ENDP	
 END	

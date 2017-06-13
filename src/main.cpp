@@ -24,6 +24,8 @@ char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
 char pass2_name[]="pass2.txt";
 char lst_name[]="lst.txt";
+bool is_out[256]={false};
+int is_out_i=0;
 
 string ident = "uASM-TV01S.ASM";
 fstream org_in;
@@ -97,14 +99,37 @@ int main ()
     pass1.open(pass1_name,ios::out);
 
     lst_out.open(lst_name,ios::out);
-
-
-    //cout<<"==========PASS1==========\n";
-    bool pass_out;
+    //copy data segment to lst
     while ( getline (org_in,line) )
     {
+        strcpy(str,line.c_str());
+        pch = strtok (str," \t,");   //first word
+        if(pch==NULL)   //avoid empty line
+            continue;
+        string pch_str(pch);
+        if(str[0]=='.')
+        {
+            pch_str = pch_str.substr(1,pch_str.size()-1);
+            if(pch_str=="DATA")
+            {
+               break;
+            }
+        }
+        lst_out<<line<<endl;
+
+    }
+
+
+    org_in.clear();
+    org_in.seekg(0, ios::beg);
+
+    //cout<<"==========PASS1==========\n";
+    bool CODE_OUT = false;
+
+    while ( getline (org_in,line) )
+    {
+        is_out_i++;
      //   cout<<endl<<"l:"<<line<<endl;
-        pass_out = true;
         strcpy(str,line.c_str());
         pch = strtok (str," \t,");   //first word
         if(pch==NULL)   //avoid empty line
@@ -115,6 +140,7 @@ int main ()
         {
 
             pch_str = pch_str.substr(1,pch_str.size()-1);
+
             if(pch_str=="STACK")
             {
                 pch = strtok (NULL," \t");
@@ -127,20 +153,29 @@ int main ()
               //      init_str+=after_stack_size_str;
 
                 }
+                continue;
             }
             else if(pch_str=="DATA")
             {
-                data_seg();
+                pch_str  = data_seg();
+
+            }
+            if(pch_str=="CODE")
+            {
+                CODE_OUT = true;
+
                continue;
             }
-            pass_out = false;
         }
-
+        //build EQU table
         do
         {
             string find_equ_str(pch);
             if(find_equ_str[0]==';')
+            {
+
                 break;
+            }
             if(!find_equ_str.compare("EQU"))
             {
 
@@ -153,27 +188,38 @@ int main ()
                 string to_name(pch);
                 equ_tbl[def_name]=to_name;
                 cout<<" equ tbl:"<<def_name<<">"<<to_name<<endl;
-                pass_out = false;
                 break;
-
             }
             pch = strtok (NULL, " \t");
-
         }while(pch!= NULL);
-        if(pass_out)
+        if(CODE_OUT)
         {
+            is_out[is_out_i] = true;
             strcpy(str,line.c_str());
+
             pch = strtok (str," \t,");
-            while(pch!=NULL)
+            if(pch[0]==';')
             {
-                if(pch[0]==';')
-                    break;
-                pass1<<pch<<"\t";
-                pch = strtok (NULL, " \t");
+                is_out[is_out_i] =false;
             }
-            pass1<<endl;
+            else
+            {
+                while(pch!=NULL)
+                {
+                    if(pch[0]==';')
+                    {
+                        break;
+                    }
+                    pass1<<pch<<"\t";
+                    pch = strtok (NULL, " \t");
+                }
+                if(is_out[is_out_i])
+                    pass1<<endl;
+            }
+
         }
-        lst_out<<line<<endl;
+
+
     }
     org_in.close();
     pass1.close();
@@ -190,6 +236,22 @@ int main ()
         cout<<"cannot open pass2 file";
         return 0;
     }
+    is_out_i++;
+    /*
+    cout<<"i="<<dec<<is_out_i;
+
+    for(int i =0;i<128;i++)
+    {
+        if(is_out[i])
+            cout<<"line"<<i<<"out\n";
+        else
+            cout<<i<<"block\n";
+
+    }
+    return 0;
+    */
+
+
     //return to file start
     /*
     org_in.clear();
@@ -223,12 +285,20 @@ int main ()
             string name = pch_str.substr(0,pch_str.size()-1);
             name = lowerCase(name);
             addr_tbl[name] =getPCstr(code_PC);
+            cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
             //cout<<str;
              pch = strtok (NULL," \t,");
              if(pch == NULL)
+             {
+                lst_out<<"\t"<<line;
+                lst_out<<endl;
                 continue;
+             }
+
         }
         cout<<getPCstr(code_PC)<<"\t";
+        lst_out<<getPCstr(code_PC)<<"\t";
+
         while(1)
         {
 
@@ -249,8 +319,9 @@ int main ()
                 pch = strtok (str," \t");
                 string name(pch);
                 name= lowerCase(name);
-                //cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
                 addr_tbl[name] =getPCstr(code_PC);
+                cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
+
                 //cout<<str<<"\t"<<"PROC"<<endl;
                 break;
             }
@@ -283,6 +354,7 @@ int main ()
                     if(is_hex_str(name))
                     {
                         cout<<"cd"<<name;
+                        lst_out<<"cd"<<name;
                         code_PC+=2;
                         break;
                     }
@@ -308,18 +380,23 @@ int main ()
             if(!pch_str.compare("RET"))
             {
                 cout<<"c3";
+                lst_out<<"c3";
                 code_PC+=1;
                 break;
             }
             if(!pch_str.compare("ENDP"))
             {
                 cout<<"\t";
+                lst_out<<"\t";
+
                 break;
             }
 
             if(!pch_str.compare("END"))
             {
                 cout<<"\t";
+                lst_out<<"\t";
+
                 break;
             }
 
@@ -367,6 +444,8 @@ int main ()
 
           cout<<"\t"<<line;
           cout<<"\n";
+          lst_out<<"\t"<<line;
+          lst_out<<"\n";
     }
 
     pass1.close();
@@ -381,7 +460,7 @@ void jxx(char *pch,string J_hex)
     pch = strtok (NULL, " \t");
 
     cout<<J_hex;
-
+    lst_out<<J_hex;
     if(J_hex=="e8")//CALL
         code_PC+=3;
     else

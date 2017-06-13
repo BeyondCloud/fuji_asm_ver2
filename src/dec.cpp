@@ -1,7 +1,6 @@
 #include "dec.h"
 void dec(char *chp1, char *chp2)
 {
-    char* pch[2];
     //np stand for no prefix
     string str(chp1);
 
