@@ -33,7 +33,8 @@ fstream pass2;
 string final_str;
 int data_PC = 0;//data counter
 int code_PC = 0;//
-vector<string> ins_vec = {"MOV","CMP","SUB","ADD","DEC"};
+vector<string> ins_vec = {"MOV","CMP","SUB","ADD","DEC","XCHG"};
+
 void pFinal()
 {
 
@@ -93,8 +94,7 @@ int main ()
     }
     pass1.open("pass1.txt",ios::out);
 
-    //pass 1
-    cout<<"==========PASS1==========\n";
+    //cout<<"==========PASS1==========\n";
     bool pass_out;
     while ( getline (org_in,line) )
     {
@@ -148,17 +148,13 @@ int main ()
                 string to_name(pch);
                 equ_tbl[def_name]=to_name;
                 cout<<" equ tbl:"<<def_name<<">"<<to_name<<endl;
-
                 pass_out = false;
                 break;
 
             }
-            cout<<pch<<"\t";
             pch = strtok (NULL, " \t");
 
         }while(pch!= NULL);
-
-
         if(pass_out)
         {
             strcpy(str,line.c_str());
@@ -173,13 +169,9 @@ int main ()
             pass1<<endl;
         }
 
-        cout<<endl;
     }
     org_in.close();
     pass1.close();
-
-
- //   return 0;
     pass1.open("pass1.txt",ios::in);
     pass2.open("pass2.txt",ios::out);
 
@@ -209,7 +201,6 @@ int main ()
 */
     //pass2
     cout<<"==========PASS2==========\n";
-
     while ( getline (pass1,line) )
     {
         mnem = "0";
@@ -217,25 +208,27 @@ int main ()
         pch = strtok (str," \t,");
         if(pch==NULL)   //avoid empty line
             continue;
+
+
         //match opcode
         string pch_str(pch);
-        cout<<getPCstr(code_PC)<<"\t";
         if(pch_str[pch_str.size()-1] == ':')
         {
             //remove last ':'
             string name = pch_str.substr(0,pch_str.size()-1);
             name = lowerCase(name);
-            cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
             addr_tbl[name] =getPCstr(code_PC);
-            cout<<getPCstr(code_PC)<<"\t"<<str<<endl;
+            //cout<<str;
              pch = strtok (NULL," \t,");
              if(pch == NULL)
                 continue;
         }
+        cout<<getPCstr(code_PC)<<"\t";
         while(1)
         {
 
             string pch_str(pch);
+            pch_str = upperCase(pch_str);
             if(op_tbl.find(pch_str) != op_tbl.end())
             {
                 for(int i =0;i<ins_vec.size();i++)
@@ -251,9 +244,9 @@ int main ()
                 pch = strtok (str," \t");
                 string name(pch);
                 name= lowerCase(name);
-                cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
+                //cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
                 addr_tbl[name] =getPCstr(code_PC);
-                cout<<str<<endl;
+                //cout<<str<<"\t"<<"PROC"<<endl;
                 break;
             }
             if(!pch_str.compare("DB"))
@@ -265,13 +258,12 @@ int main ()
                     if(name.size()>2)
                         name = name.substr(name.size()-3,2);
                 }
-                cout<<"DB\t"<<name<<endl;
+                cout<<"DB\t"<<pch<<"\t"<<name<<endl;
                 code_PC+=1;
                 break;
             }
             if(tbl_find(jxx_tbl,pch_str))
             {
-                cout<<pch_str<<"\t";
                 jxx(pch,jxx_tbl[pch_str]);
                 break;
             }
@@ -284,27 +276,44 @@ int main ()
                     name = name.substr(0,name.size()-1);
                     if(is_hex_str(name))
                     {
-                        cout<<"cd"<<name<<endl;
+                        cout<<"cd"<<name;
                         code_PC+=2;
                         break;
                     }
                 }
             }
+            if(!pch_str.compare("LEA"))
+            {
+                cout<<"LEA\t";
+                code_PC+=4;
+                cout<<"8D";
+                pch = strtok (NULL, " \t,");
+                string reg_str(pch);
+                init_operand(reg_str,opr1);
+                string opstr = "00";
+                opstr+=opr1.reg_val;
+                opstr+="110";
+                pch = strtok (NULL, " \t,");
+                string name(pch);
+                name = lowerCase(name);
+                cout<<str_bin2hex(opstr.size()/4,opstr)<<"\t"<<name<<endl;
+                break;
+            }
             if(!pch_str.compare("RET"))
             {
-                cout<<"RET\tc3";
+                cout<<"c3";
                 code_PC+=1;
                 break;
             }
             if(!pch_str.compare("ENDP"))
             {
-                cout<<"ENDP";
+                cout<<"\t";
                 break;
             }
 
             if(!pch_str.compare("END"))
             {
-                cout<<"END";
+                cout<<"\t";
                 break;
             }
 
@@ -332,7 +341,7 @@ int main ()
             {
                 break;
             }
-                cout << pch << "\t";
+         //       cout << pch << "\t";
             pch = strtok (NULL, " \t,");
             if(opr_id < 2)
             {
@@ -350,6 +359,7 @@ int main ()
           }
         }
 
+          cout<<"\t"<<line;
           cout<<"\n";
     }
 
@@ -362,11 +372,10 @@ int main ()
 }
 void jxx(char *pch,string J_hex)
 {
-    cout<<"\t"<<J_hex<<"\t";
     pch = strtok (NULL, " \t");
-    string name(pch);
-    name = lowerCase(name);
-    cout<<name;
+
+    cout<<J_hex;
+
     if(J_hex=="e8")//CALL
         code_PC+=3;
     else

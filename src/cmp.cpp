@@ -26,12 +26,11 @@ void cmp(char *chp1, char *chp2)
         {
             code_PC+=3;
             opstr="10000011";//83
-            opstr+=opr1.reg_val;
             opstr+="11111";    //  /7
             opstr+=opr1.reg_val;
         }
         opstr+=opr2.imm_bin_st;
     }
     if(opstr.size()>=16)
-        cout<<str_bin2hex(opstr.size()/4,opstr)<<"\t"<<opstr<<endl;
+        printHex(opstr);
 }

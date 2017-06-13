@@ -54,7 +54,7 @@
  0011  8A D0			           MOV    DL, AL
  0013  2C 30			           SUB    AL, 48            ; Convert ASCII to decimal binary
  0015  C3			           RET
- 
+
  0016				   gError:
  0016  B2 07			           MOV    DL, BEL           ; Error alert
 				          
@@ -68,7 +68,7 @@
  0020  74 04			           JE     NoMore            ; DL = 00 means end-of-string
  0022  B4 02			           MOV    AH, 02H
  0024  CD 21			           INT    21H
- 0026				   NoMore: 
+ 0026				   NoMore:  
  0026  C3			           RET
  0027				   putChr  ENDP                     ; End of Subroutine
 				;
@@ -92,14 +92,14 @@
  003E  4A			           DEC    DX
  003F  EB F6			           JMP    doLoop
  0041				   doDone:                          ; Result is in AX (Two ASCII Chars)
- 0041  D4			           DB     0D4H              ; Define the AAM instruction
+ 0041  D4			           DB     0D4H               ; Define the AAM instruction
  0042  0A			           DB     00AH
  0043  05 3030			           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
 				           
  0046  C3			           RET
  0047				   doComp  ENDP                     ; End of Subroutine
 				;
-				;
+				; 
  0047				   MAIN    PROC
 
  0047  B8 ---- R		           MOV    AX, @DATA	    ; Set up DATA SEGMENT

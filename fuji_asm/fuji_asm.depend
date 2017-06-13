@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1497281162 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
+1497333700 source:c:\users\a1989\desktop\fuji_asm_new\src\main.cpp
 	<iostream>
 	<fstream>
 	<string.h>
@@ -49,7 +49,7 @@
 	<iomanip>
 	<string.h>
 
-1497285569 c:\users\a1989\desktop\fuji_asm_new\inc\opcode_proc.h
+1497325247 c:\users\a1989\desktop\fuji_asm_new\inc\opcode_proc.h
 	<string>
 	"map_tbl.h"
 	<iostream>
@@ -60,20 +60,20 @@
 	<string.h>
 	<stdexcept>
 
-1497285872 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode_proc.cpp
+1497330857 source:c:\users\a1989\desktop\fuji_asm_new\src\opcode_proc.cpp
 	"opcode_proc.h"
 	<algorithm>
 
 1497259581 c:\users\a1989\desktop\fuji_asm_new\inc\mov.h
 	"opcode_proc.h"
 
-1497286271 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
+1497325292 source:c:\users\a1989\desktop\fuji_asm_new\src\mov.cpp
 	"mov.h"
 
 1497167684 c:\users\a1989\desktop\fuji_asm_new\inc\misc_str.h
 	<string.h>
 
-1497232715 source:c:\users\a1989\desktop\fuji_asm_new\src\data_segment.cpp
+1497324147 source:c:\users\a1989\desktop\fuji_asm_new\src\data_segment.cpp
 	"data_segment.h"
 	<iostream>
 	<string.h>
@@ -91,13 +91,13 @@
 	<sstream>
 	<fstream>
 
-1497252262 source:c:\users\a1989\desktop\fuji_asm_new\src\cmp.cpp
+1497325256 source:c:\users\a1989\desktop\fuji_asm_new\src\cmp.cpp
 	"cmp.h"
 
 1497259603 c:\users\a1989\desktop\fuji_asm_new\inc\cmp.h
 	"opcode_proc.h"
 
-1497280585 source:c:\users\a1989\desktop\fuji_asm_new\src\add.cpp
+1497325260 source:c:\users\a1989\desktop\fuji_asm_new\src\add.cpp
 	"add.h"
 
 1497268480 c:\users\a1989\desktop\fuji_asm_new\inc\add.h
@@ -116,7 +116,7 @@
 1497259772 c:\users\a1989\desktop\fuji_asm_new\inc\sub.h
 	"opcode_proc.h"
 
-1497271741 source:c:\users\a1989\desktop\fuji_asm_new\src\sub.cpp
+1497325273 source:c:\users\a1989\desktop\fuji_asm_new\src\sub.cpp
 	"sub.h"
 
 1497272056 source:c:\users\a1989\desktop\fuji_asm_new\src\dec.cpp
@@ -128,6 +128,6 @@
 1497281245 c:\users\a1989\desktop\fuji_asm_new\inc\xchg.h
 	"opcode_proc.h"
 
-1497284777 source:c:\users\a1989\desktop\fuji_asm_new\src\xchg.cpp
+1497325263 source:c:\users\a1989\desktop\fuji_asm_new\src\xchg.cpp
 	"xchg.h"
 

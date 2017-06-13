@@ -11,15 +11,17 @@
 #include <string.h>
 #include <stdexcept>
 using namespace std;
+void printHex(string str);
 void printPC(int pc);
 string getPCstr(const int pc);
 char last_letter(char *str);
 std::string string_to_hex(const std::string& input);
 std::string hex_to_string(const std::string& input);
+string upperCase(string data);
 string lowerCase(string data);
 inline const char* h2b(char c);
 
-typedef enum{reg,sreg,mem,imm,N_A} type_t;
+typedef enum{reg,sreg,mem,imm,addr,N_A} type_t;
 struct oprand_t
 {
     string name; //ex: eax, ebx...
@@ -62,6 +64,7 @@ void init_operand(string str,oprand_t &opr);
 #define type_r(opr_t) (opr_t.type == reg)
 #define type_sr(opr_t) (opr_t.type == sreg)
 #define type_imm(opr_t) (opr_t.type == imm)
+#define type_addr(opr_t) (opr_t.type == addr)
 
 #define type_rm(opr_t) ((opr_t.type == reg)||(opr_t.type == mem))
 

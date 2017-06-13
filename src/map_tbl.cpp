@@ -7,6 +7,7 @@
 #include "mul.h"
 #include "div.h"
 #include "dec.h"
+#include "xchg.h"
 
 
 map<string, op_fp> op_tbl;
@@ -66,6 +67,8 @@ void tbl_init()
     op_tbl["SUB"]= sub;
     op_tbl["ADD"]= add;
     op_tbl["DEC"]= dec;
+    op_tbl["XCHG"]= xchg;
+
 
 
 

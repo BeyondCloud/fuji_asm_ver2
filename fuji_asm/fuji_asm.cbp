@@ -36,6 +36,7 @@
 		<Unit filename="../inc/add.h" />
 		<Unit filename="../inc/cmp.h" />
 		<Unit filename="../inc/data_segment.h" />
+		<Unit filename="../inc/dec.h" />
 		<Unit filename="../inc/div.h" />
 		<Unit filename="../inc/map_tbl.h" />
 		<Unit filename="../inc/misc_str.h" />
@@ -44,15 +45,19 @@
 		<Unit filename="../inc/opcode.h" />
 		<Unit filename="../inc/opcode_proc.h" />
 		<Unit filename="../inc/sub.h" />
+		<Unit filename="../inc/xchg.h" />
 		<Unit filename="../src/add.cpp" />
 		<Unit filename="../src/cmp.cpp" />
 		<Unit filename="../src/data_segment.cpp" />
+		<Unit filename="../src/dec.cpp" />
 		<Unit filename="../src/div.cpp" />
 		<Unit filename="../src/main.cpp" />
 		<Unit filename="../src/map_tbl.cpp" />
 		<Unit filename="../src/mov.cpp" />
 		<Unit filename="../src/mul.cpp" />
 		<Unit filename="../src/opcode_proc.cpp" />
+		<Unit filename="../src/sub.cpp" />
+		<Unit filename="../src/xchg.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

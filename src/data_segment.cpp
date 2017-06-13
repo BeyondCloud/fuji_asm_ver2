@@ -15,7 +15,6 @@ void data_seg()
     string line;
     char str[128];
     char *pch;
-    printPC(data_PC);
     bool isNewAddr = true;
     while ( getline (org_in,line) )
     {
@@ -33,8 +32,10 @@ void data_seg()
             if(pch==NULL)
                 break;
             string pch_str(pch);
+
             if(pch_str == "DB")
             {
+
                 strcpy(str,line.c_str());
                 bool strREC= false;
                 string scan1;
@@ -100,7 +101,7 @@ void data_seg()
 
                 }
               //  printPC(data_PC);
-              cout<<endl;
+             // cout<<endl;
                 if(isNewAddr)
                 {
                     name= lowerCase(name);
@@ -108,7 +109,6 @@ void data_seg()
                     addr_tbl[name] =getPCstr(data_PC);
                 }
                 data_PC+= (result.size()/2);
-                cout<<result;
                 printPC(data_PC);
                 name = lowerCase(name);
 
@@ -118,6 +118,7 @@ void data_seg()
             }
             else if(pch_str == "DW")
             {
+
                 strcpy(str,line.c_str());
                 pch = strtok(str," \t");
                 string name(pch);
@@ -129,7 +130,6 @@ void data_seg()
                     name= lowerCase(name);
                     cout<<"  tbl:"<<name<<">"<<getPCstr(data_PC)<<endl;
                     addr_tbl[name] =getPCstr(data_PC);
-                   // data_PC+=2;
                 }
                 if(is_number(s))
                 {
@@ -137,16 +137,13 @@ void data_seg()
                     ss.str("");
                     ss << hex << setfill('0')<<setw(4)<<s;
                     data_PC+=2;
-                    cout<<ss.str();
-                    printPC(data_PC);
                     break;
                 }
                 s = lowerCase(s);
 
                 if(tbl_find(addr_tbl,s))
                 {
-                    cout<<addr_tbl[s];
-                    printPC(data_PC);
+                   // printPC(data_PC);
                     data_PC+=2;
 
                 }

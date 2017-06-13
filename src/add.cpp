@@ -1,7 +1,6 @@
 #include "add.h"
 void add(char *chp1, char *chp2)
 {
-    char* pch[2];
     //np stand for no prefix
     string str[2] ={string(chp1),string(chp2)};
 
@@ -29,7 +28,7 @@ void add(char *chp1, char *chp2)
         {
             if((opr1.bits == 16) &&(opr2.bits == 16))
             {
-                code_PC+=2;
+                code_PC+=3;
                 opstr+="00000101";//05
                 opstr+=opr2.imm_bin_st;
             }
@@ -39,6 +38,5 @@ void add(char *chp1, char *chp2)
     {
         cout<<"no such rule";
     }
-    cout<<str_bin2hex(opstr.size()/4,opstr)<<"\t"<<opstr<<endl;
-
+    printHex(opstr);
 }

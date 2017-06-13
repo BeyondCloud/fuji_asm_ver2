@@ -2,6 +2,10 @@
 #include <algorithm>
 using namespace std;
 oprand_t opr1,opr2;
+void printHex(string str)
+{
+    cout<<str_bin2hex(str.size()/4,str);
+}
 void printPC(int pc)
 {
      cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
@@ -39,6 +43,11 @@ std::string string_to_hex(const std::string& input)
 string lowerCase(string data)
 {
     transform(data.begin(), data.end(), data.begin(), ::tolower);
+    return data;
+}
+string upperCase(string data)
+{
+    transform(data.begin(), data.end(), data.begin(), ::toupper);
     return data;
 }
 std::string hex_to_string(const std::string& input)
@@ -198,6 +207,12 @@ void init_operand(string str,oprand_t &opr)
         opr.bits = 8;
         opr.type = sreg;
         opr.reg_val = sreg_tbl[str];
+    }
+    else if(tbl_find(addr_tbl,lowerCase(str)))
+    {
+        opr.name = lowerCase(str);
+        opr.bits = 16;
+        opr.type = addr;
     }
     else if(setup_imm(opr,str,opr1.bits))
     {}
