@@ -274,7 +274,7 @@ int main ()
 */
     //pass2
     cout<<"==========PASS2==========\n";
- //   lst_out<<".CODE"<<endl;
+    lst_out<<".CODE"<<endl;
 
     while ( getline (pass1,line) )
     {
@@ -349,6 +349,7 @@ int main ()
             if(tbl_find(jxx_tbl,pch_str))
             {
                 jxx(pch,jxx_tbl[pch_str]);
+
                 break;
             }
             if(!pch_str.compare("INT"))
@@ -468,7 +469,7 @@ int main ()
 
     org_in.clear();
     org_in.seekg(0, ios::beg);
-    is_out_i=0;
+    is_out_i=1;
     while ( getline (org_in,line_org) )
     {
         if(is_out[is_out_i])
