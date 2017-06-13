@@ -86,6 +86,10 @@ int main ()
 
     tbl_init();
     string line;
+    string line_org;
+    string line_p2;
+
+
     char str[128];
     char *pch;
     char* opr[2];
@@ -128,8 +132,9 @@ int main ()
 
     while ( getline (org_in,line) )
     {
-        is_out_i++;
      //   cout<<endl<<"l:"<<line<<endl;
+        is_out_i++;
+
         strcpy(str,line.c_str());
         pch = strtok (str," \t,");   //first word
         if(pch==NULL)   //avoid empty line
@@ -221,7 +226,10 @@ int main ()
 
 
     }
-    org_in.close();
+    /*
+    org_in.clear();
+    org_in.seekg(0, ios::beg);
+    */
     pass1.close();
     pass1.open("pass1.txt",ios::in);
     pass2.open("pass2.txt",ios::out);
@@ -236,8 +244,9 @@ int main ()
         cout<<"cannot open pass2 file";
         return 0;
     }
+/*
     is_out_i++;
-    /*
+
     cout<<"i="<<dec<<is_out_i;
 
     for(int i =0;i<128;i++)
@@ -249,14 +258,11 @@ int main ()
 
     }
     return 0;
-    */
-
+*/
 
     //return to file start
-    /*
-    org_in.clear();
-    org_in.seekg(0, ios::beg);
-    */
+
+
 /*
     for(int i =0;i<init_str.size();i+=2)
     {
@@ -268,8 +274,11 @@ int main ()
 */
     //pass2
     cout<<"==========PASS2==========\n";
+ //   lst_out<<".CODE"<<endl;
+
     while ( getline (pass1,line) )
     {
+        getline (org_in,line_org);
         mnem = "0";
         strcpy(str,line.c_str());
         pch = strtok (str," \t,");
@@ -290,14 +299,12 @@ int main ()
              pch = strtok (NULL," \t,");
              if(pch == NULL)
              {
-                lst_out<<"\t"<<line;
-                lst_out<<endl;
                 continue;
              }
 
         }
         cout<<getPCstr(code_PC)<<"\t";
-        lst_out<<getPCstr(code_PC)<<"\t";
+        pass2<<getPCstr(code_PC)<<"\t";
 
         while(1)
         {
@@ -354,7 +361,8 @@ int main ()
                     if(is_hex_str(name))
                     {
                         cout<<"cd"<<name;
-                        lst_out<<"cd"<<name;
+                        pass2<<"cd"<<name;
+
                         code_PC+=2;
                         break;
                     }
@@ -380,14 +388,14 @@ int main ()
             if(!pch_str.compare("RET"))
             {
                 cout<<"c3";
-                lst_out<<"c3";
+                pass2<<"c3";
                 code_PC+=1;
                 break;
             }
             if(!pch_str.compare("ENDP"))
             {
                 cout<<"\t";
-                lst_out<<"\t";
+                pass2<<"\t";
 
                 break;
             }
@@ -395,8 +403,7 @@ int main ()
             if(!pch_str.compare("END"))
             {
                 cout<<"\t";
-                lst_out<<"\t";
-
+                pass2<<"\t";
                 break;
             }
 
@@ -444,14 +451,35 @@ int main ()
 
           cout<<"\t"<<line;
           cout<<"\n";
-          lst_out<<"\t"<<line;
-          lst_out<<"\n";
+        if(is_out[is_out_i])
+            pass2<<line_org<<endl;
+
+          //pass2<<"\n";
+
+
+
     }
+
 
     pass1.close();
     pass2.close();
+    pass2.open("pass2.txt",ios::in);
+   // lst_out.open("lst.txt",ios::out);
 
+    org_in.clear();
+    org_in.seekg(0, ios::beg);
+    is_out_i=0;
+    while ( getline (org_in,line_org) )
+    {
+        if(is_out[is_out_i])
+        {
+            getline(pass2,line_p2);
+            lst_out<<line_p2;
+            lst_out<<line_org<<endl;
+        }
+        is_out_i++;
 
+    }
   return 0;
 
 }
@@ -460,7 +488,8 @@ void jxx(char *pch,string J_hex)
     pch = strtok (NULL, " \t");
 
     cout<<J_hex;
-    lst_out<<J_hex;
+    pass2<<J_hex;
+
     if(J_hex=="e8")//CALL
         code_PC+=3;
     else

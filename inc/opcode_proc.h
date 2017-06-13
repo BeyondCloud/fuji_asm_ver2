@@ -23,6 +23,8 @@ string upperCase(string data);
 string lowerCase(string data);
 inline const char* h2b(char c);
 extern fstream lst_out;
+extern fstream pass2;
+
 
 typedef enum{reg,sreg,mem,imm,addr,N_A} type_t;
 struct oprand_t

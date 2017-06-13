@@ -6,7 +6,8 @@ void printHex(string str)
 {
     string hex_str  = str_bin2hex(str.size()/4,str);
     cout<<hex_str;
-    lst_out<<hex_str;
+    pass2<<hex_str;
+
 
 }
 void printPC(int pc)

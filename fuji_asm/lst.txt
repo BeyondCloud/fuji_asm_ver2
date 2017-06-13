@@ -1,71 +1,101 @@
-0000		getDgt	PROC	
-0000	b23f	gLoop:	MOV	DL,	'?'	
-0002	e8	CALL	putChr	
-0005	b401	MOV	AH,	01H	
-0007	cd21	INT	21H	
-0009	3c30	CMP	AL,	'0'	
-000b	7e	JLE	gError	
-000d	3c39	CMP	AL,	'9'	
-000f	7f	JG	gError	
-0011	8ad0	MOV	DL,	AL	
-0013	2c30	SUB	AL,	48	
-0015	c3	RET	
-	gError:	
-0016	b207	MOV	DL,	BEL	
-0018	e8	CALL	putChr	
-001b	eb	JMP	gLoop	
-001d			getDgt	ENDP	
-001d		putChr	PROC	
-001d	80fa00	CMP	DL,	0	
-0020	74	JE	NoMore	
-0022	b402	MOV	AH,	02H	
-0024	cd21	INT	21H	
-	NoMore:	
-0026	c3	RET	
-0027			putChr	ENDP	
-0027		NewLine	PROC	
-0027	b20d	MOV	DL,	CR	
-0029	e8	CALL	putChr	
-002c	b20a	MOV	DL,	LF	
-002e	e8	CALL	putChr	
-0031	c3	RET	
-0032			NewLine	ENDP	
-0032		doComp	PROC	
-0032	b80000	MOV	AX,	0	
-0035	b600	MOV	DH,	0	
-0037	83fa0000	doLoop:	CMP	DX,	0	
-003a	7e	JLE	doDone	
-003c	03c2	ADD	AX,	DX	
-003e	4a	DEC	DX	
-003f	eb	JMP	doLoop	
-	doDone:	
-0041	d4	DB	0D4H	
-0042	0a	DB	00AH	
-0043	053030	ADD	AX,	3030H	
-0046	c3	RET	
-0047			doComp	ENDP	
-0047		MAIN	PROC	
-0047	b80000	MOV	AX,	@DATA	
-004a	8ed8	MOV	DS,	AX	
-004c	8d16	LEA	DX,	Start1	
-0050	b409	MOV	AH,	09H	
-0052	cd21	INT	21H	
-0054	e8	mStart:	CALL	NewLine	
-0057	e8	Call	getDgt	
-005a	8816005a	MOV	uIdgt,	DL	
-005e	8ad0	MOV	DL,	AL	
-0060	e8	CALL	doComp	
-0063	86e0	XCHG	AH,	AL	
-0065	a3005f	MOV	uRval,	AX	
-0068	8d16	LEA	DX,	uMSG	
-006c	b409	MOV	AH,	09H	
-006e	cd21	INT	21H	
-	mEnd:	
-0070	e8	CALL	NewLine	
-0073	8d16	LEA	DX,	Goodbye	
-0077	b409	MOV	AH,	09H	
-0079	cd21	INT	21H	
-007b	b84c00	MOV	AX,4C00H	
-007e	cd21	INT	21H	
-0080			MAIN	ENDP	
-0080			END	
+.MODEL   SMALL
+;           IDENT   uTV01A           ; This directive is not defined in MASM
+                                    ; IDENT directive means IDENTification
+                                    ; It is used to declare the program name
+  BEL      EQU     07H              ; ASCII Code of BEL (Alarming bell)
+  BS       EQU     08H              ; ASCII Code of BS  (Backspace)
+  CR       EQU     0DH              ; ASCII Code of CR  (Carriage Return)
+  LF       EQU     0AH              ; ASCII Code of LF  (Line Feed)
+.STACK  200H
+0000	25252048656C6C6F2C20576F726C642120457865637574696F6E207374617274732E2E2E2E070D0A24
+   Start1  DB   "%% Hello, World! Execution starts....", BEL, CR, LF, '$'
+0029	0029
+   size1   DW   $-start1  ;29 00 ,29h = 41 = sizeof start1 string 
+002b	25252050726F6772616D2073746F70732E2045786974206E6F7721070D0A24
+   Goodbye DB   "%% Program stops. Exit now!",           BEL, CR, LF, '$'
+004a	001f
+   size2   DW   $-Goodbye
+004c	0D0A20202053756D2831202E2E20
+    uMSG   DB   CR, LF, "   Sum(1 .. "
+005a	
+;   uIdgt  BSS  1                   ; 1-Byte buffer to store input value
+005a	01
+    uIdgt  DB  1
+005b	29203D20
+           DB   ") = "
+005f	0001
+    uRval  DW   1
+0061	
+;   uRval  BSS  2                   ; 2-Byte buffer to store result
+0061	0D0A24
+           DB   CR, LF, '$'
+0000	                                    ; and convert to binary
+0000	b23f           CALL   putChr
+0002	e8           MOV    AH, 01H           ; Get user input with echo
+0005	b401           INT    21H
+0007	cd21           CMP    AL, '0'           ; Check for invalid input
+0009	3c30           JLE    gError
+000b	7e           CMP    AL, '9'
+000d	3c39           JG     gError
+000f	7f           MOV    DL, AL
+0011	8ad0           SUB    AL, 48            ; Convert ASCII to decimal binary
+0013	2c30           RET
+0015	c3   gError: 
+0016	b207           MOV    DL, BEL           ; Error alert
+0018	e8          
+001b	eb           JMP    gLoop
+001d		   getDgt  ENDP                     ; End of Subroutine
+001d	;
+001d	80fa00                                    ; at call register DL carries the
+0020	74           JE     NoMore            ; DL = 00 means end-of-string
+0022	b402           MOV    AH, 02H
+0024	cd21           INT    21H
+0026	c3   NoMore: 
+0027		           RET
+0027	   putChr  ENDP                     ; End of Subroutine
+0027	b20d;
+0029	e8           MOV    DL, CR
+002c	b20a
+002e	e8           MOV    DL, LF
+0031	c3           CALL   putChr
+0032		           RET
+0032	   NewLine ENDP                     ; End of Subroutine
+0032	b80000;
+0035	b600           MOV    AX, 0             ; at call register DL carries n
+0037	83fa0000
+003a	7e   
+003c	03c2           JLE    doDone
+003e	4a           ADD    AX, DX
+003f	eb           DEC    DX
+0041	d4           JMP    doLoop
+0042	0a   doDone:                          ; Result is in AX (Two ASCII Chars)
+0043	053030           DB     0D4H              ; Define the AAM instruction
+0046	c3           DB     00AH
+0047		           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
+0047	           
+0047	b80000   doComp  ENDP                     ; End of Subroutine
+004a	8ed8;
+004c	8d16
+0050	b409 
+0052	cd21
+0054	e8           MOV    AH, 09H
+0057	e8
+005a	8816005a   ;
+005e	8ad0           Call   getDgt
+0060	e8           MOV    uIdgt, DL
+0063	86e0
+0065	a3005f           
+0068	8d16           XCHG   AH, AL
+006c	b409           MOV    uRval, AX
+006e	cd21
+0070	e8           MOV    AH, 09H
+0073	8d16           INT    21H
+0077	b409   mEnd:
+0079	cd21           CALL   NewLine
+007b	b84c00
+007e	cd21           MOV    AH, 09H
+0080		
+0080		   ;
+           INT    21H
+   ;
+   END 
