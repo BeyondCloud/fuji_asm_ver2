@@ -7,5 +7,7 @@ using namespace std;
 extern int data_PC;
 extern stringstream ss;
 extern fstream org_in;
+extern fstream lst_out;
+
 void data_seg();
 #endif

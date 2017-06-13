@@ -16,9 +16,12 @@ void data_seg()
     char str[128];
     char *pch;
     bool isNewAddr = true;
+    int old_dataPC;
     while ( getline (org_in,line) )
     {
+        old_dataPC = data_PC;
         isNewAddr = true;
+        string result;//use for storing long string hex code
         strcpy(str,line.c_str());
         if(str[0]=='.') //exit data field
             break;
@@ -69,7 +72,7 @@ void data_seg()
 
                 pch = strtok (NULL," \t,"); //remove DB
 
-                string result;
+                result = "";
                 if(isNewAddr)
                     pch = strtok (NULL," \t,");
                 while(pch!=NULL)
@@ -91,7 +94,7 @@ void data_seg()
                     else if(is_number(st))
                     {
                         int num;
-                        ss.str("");
+                        ss.clear();
                         ss << hex << setfill('0')<<setw(2)<<st;
                         result +=ss.str();
                     }
@@ -134,25 +137,25 @@ void data_seg()
                 if(is_number(s))
                 {
                     int num;
-                    ss.str("");
+                    ss.clear();
                     ss << hex << setfill('0')<<setw(4)<<s;
                     data_PC+=2;
-                    break;
                 }
-                s = lowerCase(s);
-
-                if(tbl_find(addr_tbl,s))
+                else if(tbl_find(addr_tbl,lowerCase(s)))
                 {
-                   // printPC(data_PC);
+                    s = addr_tbl[lowerCase(s)];
                     data_PC+=2;
-
                 }
-
+                result = s;
                 break;
             }
 
             pch = strtok (NULL," \t,");
 
         }
+        lst_out<<line<<endl;
+        lst_out<<"PC:"<<getPCstr(old_dataPC)<<endl;
+        lst_out<<result<<endl;
+
     }
 }

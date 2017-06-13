@@ -13,6 +13,7 @@
 using namespace std;
 void printHex(string str);
 void printPC(int pc);
+string subHexStr(string s1,string s2,int length);
 string getPCstr(const int pc);
 char last_letter(char *str);
 std::string string_to_hex(const std::string& input);

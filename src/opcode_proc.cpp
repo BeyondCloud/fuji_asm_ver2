@@ -8,7 +8,31 @@ void printHex(string str)
 }
 void printPC(int pc)
 {
-     cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
+    cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
+}
+string subHexStr(string s1,string s2,int len)
+{
+    stringstream ss;
+    int i1,i2;
+    ss << hex<<s1;
+    ss >> i1;
+
+    cout<<"i1="<<i1<<endl;
+
+    ss.str("");
+    ss.clear();
+
+    ss << hex<<s2;
+    ss >> i2;
+    cout<<"i2="<<i2<<endl;
+    ss.str("");
+    ss.clear();
+    int result = i1-i2;
+    ss<<hex<<setw(4)<<setfill('0')<<result;
+    string r_str = ss.str();
+    cout<<r_str<<endl;
+    r_str = r_str.substr(r_str.size()-len,len);
+    return r_str;
 }
 string getPCstr(const int pc)
 {

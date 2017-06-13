@@ -23,12 +23,13 @@ void jxx(char *pch,string J_hex);
 char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
 char pass2_name[]="pass2.txt";
+char lst_name[]="lst.txt";
 
 string ident = "uASM-TV01S.ASM";
 fstream org_in;
 fstream pass1;
 fstream pass2;
-
+fstream lst_out;
 
 string final_str;
 int data_PC = 0;//data counter
@@ -77,6 +78,7 @@ int main ()
 */
 
 
+
   //  pFinal();
   //  return 0;
 
@@ -92,7 +94,10 @@ int main ()
         cout<<"cannot open source file";
         return 0;
     }
-    pass1.open("pass1.txt",ios::out);
+    pass1.open(pass1_name,ios::out);
+
+    lst_out.open(lst_name,ios::out);
+
 
     //cout<<"==========PASS1==========\n";
     bool pass_out;
@@ -168,7 +173,7 @@ int main ()
             }
             pass1<<endl;
         }
-
+        lst_out<<line<<endl;
     }
     org_in.close();
     pass1.close();
