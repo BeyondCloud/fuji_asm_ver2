@@ -31,66 +31,69 @@
            DB   CR, LF, '$'
 .CODE
 0000	   getDgt  PROC                     ; Subroutine to get a decimal digit
-0000	b23f           CALL   putChr
-0002	b401           MOV    AH, 01H           ; Get user input with echo
-0004	cd21           INT    21H
-0006	3c30           CMP    AL, '0'           ; Check for invalid input
-0008	7e	gerror           JLE    gError
-000a	3c39           CMP    AL, '9'
-000c	7f	gerror           JG     gError
-000e	8ad0           MOV    DL, AL
-0010	2c30           SUB    AL, 48            ; Convert ASCII to decimal binary
-0012	c3           RET
-0013	b207           MOV    DL, BEL           ; Error alert
-0015	e8	putchr           CALL   putChr 
-0018	eb	gloop           JMP    gLoop
-001a		   getDgt  ENDP                     ; End of Subroutine
-001a	   putChr  PROC                     ; Subroutine to display a character
-001a	80fa00           CMP    DL, 0             ; character to be displayed
-001d	74	nomore           JE     NoMore            ; DL = 00 means end-of-string
-001f	b402           MOV    AH, 02H
-0021	cd21           INT    21H
-0023	c3           RET
-0024		   putChr  ENDP                     ; End of Subroutine
-0024	   NewLine PROC                     ; Subroutine to start a new line
-0024	b20d           MOV    DL, CR
-0026	e8	putchr           CALL   putChr
-0029	b20a           MOV    DL, LF
-002b	e8	putchr           CALL   putChr
-002e	c3           RET
-002f		   NewLine ENDP                     ; End of Subroutine
-002f	   doComp  PROC                     ; Subroutine to compute Sum of 1 .. n
-002f	b80000           MOV    AX, 0             ; at call register DL carries n
-0032	b600           MOV    DH, 0
-0034	83fa0000           JLE    doDone
-0037	03c2           ADD    AX, DX
-0039	4a           DEC    DX
-003a	eb	doloop           JMP    doLoop
-003c	d4           DB     0D4H              ; Define the AAM instruction
-003d	0a           DB     00AH
-003e	053030           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
-0041	c3           RET
-0042		   doComp  ENDP                     ; End of Subroutine
-0042	   MAIN    PROC
-0042	b80000           MOV    AX, @DATA     ; Set up DATA SEGMENT
-0045	8ed8           MOV    DS, AX
-0047	8d16	start1           LEA    DX, Start1      ; Display program start message
-           MOV    AH, 09H
-004b	b409           INT    21H
-004d	cd21           Call   getDgt
-004f	e8	newline           MOV    uIdgt, DL
-0052	8816005a           MOV    DL, AL
-0056	8ad0           CALL   doComp
-0058	e8	docomp           XCHG   AH, AL
-005b	86e0           MOV    uRval, AX
-005d	a3005f           LEA    DX, uMSG      ; Display result message
-0060	8d16	umsg           MOV    AH, 09H
-           INT    21H
-0064	b409           CALL   NewLine
-0066	cd21           LEA    DX, Goodbye       ; Display goodbye message
-0068	e8	newline           MOV    AH, 09H
-006b	8d16	goodbye           INT    21H
-           MOV    AX,4C00H          ; Program exits using DOS service
-006f	b409           INT    21H
-0071	cd21   MAIN    ENDP
-0073	b84c00   END 
+0000	b23f   gLoop:  MOV    DL, '?'
+0002	e8	putchr           CALL   putChr
+0005	b401           MOV    AH, 01H           ; Get user input with echo
+0007	cd21           INT    21H
+0009	3c30           CMP    AL, '0'           ; Check for invalid input
+000b	7e	gerror           JLE    gError
+000d	3c39           CMP    AL, '9'
+000f	7f	gerror           JG     gError
+0011	8ad0           MOV    DL, AL
+0013	2c30           SUB    AL, 48            ; Convert ASCII to decimal binary
+0015	c3           RET
+0016	b207           MOV    DL, BEL           ; Error alert
+0018	e8	putchr           CALL   putChr 
+001b	eb	gloop           JMP    gLoop
+001d		   getDgt  ENDP                     ; End of Subroutine
+001d	   putChr  PROC                     ; Subroutine to display a character
+001d	80fa00           CMP    DL, 0             ; character to be displayed
+0020	74	nomore           JE     NoMore            ; DL = 00 means end-of-string
+0022	b402           MOV    AH, 02H
+0024	cd21           INT    21H
+0026	c3           RET
+0027		   putChr  ENDP                     ; End of Subroutine
+0027	   NewLine PROC                     ; Subroutine to start a new line
+0027	b20d           MOV    DL, CR
+0029	e8	putchr           CALL   putChr
+002c	b20a           MOV    DL, LF
+002e	e8	putchr           CALL   putChr
+0031	c3           RET
+0032		   NewLine ENDP                     ; End of Subroutine
+0032	   doComp  PROC                     ; Subroutine to compute Sum of 1 .. n
+0032	b80000           MOV    AX, 0             ; at call register DL carries n
+0035	b600           MOV    DH, 0
+0037	83fa0000   doLoop: CMP    DX, 0
+003a	7e	dodone           JLE    doDone
+003c	03c2           ADD    AX, DX
+003e	4a           DEC    DX
+003f	eb	doloop           JMP    doLoop
+0041	d4           DB     0D4H              ; Define the AAM instruction
+0042	0a           DB     00AH
+0043	053030           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
+0046	c3           RET
+0047		   doComp  ENDP                     ; End of Subroutine
+0047	   MAIN    PROC
+0047	b80000           MOV    AX, @DATA     ; Set up DATA SEGMENT
+004a	8ed8           MOV    DS, AX
+004c	8d16	start1           LEA    DX, Start1      ; Display program start message
+0050	b409           MOV    AH, 09H
+0052	cd21           INT    21H
+0054	e8	newline   mStart: CALL   NewLine
+0057	e8	getdgt           Call   getDgt
+005a	8816005a           MOV    uIdgt, DL
+005e	8ad0           MOV    DL, AL
+0060	e8	docomp           CALL   doComp
+0063	86e0           XCHG   AH, AL
+0065	a3005f           MOV    uRval, AX
+0068	8d16	umsg           LEA    DX, uMSG      ; Display result message
+006c	b409           MOV    AH, 09H
+006e	cd21           INT    21H
+0070	e8	newline           CALL   NewLine
+0073	8d16	goodbye           LEA    DX, Goodbye       ; Display goodbye message
+0077	b409           MOV    AH, 09H
+0079	cd21           INT    21H
+007b	b84c00           MOV    AX,4C00H          ; Program exits using DOS service
+007e	cd21           INT    21H
+0080		   MAIN    ENDP
+0080		   END 

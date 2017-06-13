@@ -213,7 +213,10 @@ int main ()
             {
                 if(str[str.size()-1]==':')
                 {
-                     is_out[is_out_i] =false;
+
+                     pch = strtok (NULL," \t,");
+                     if(pch==NULL ||pch[0]==';')
+                        is_out[is_out_i] =false;
                 }
                 while(pch!=NULL)
                 {
@@ -388,7 +391,7 @@ int main ()
                 string name(pch);
                 name = lowerCase(name);
                 printHex(opstr);
-                pass2<<"\t"<<name<<endl;
+                pass2<<"\t"<<name;
                 break;
             }
             if(!pch_str.compare("RET"))
