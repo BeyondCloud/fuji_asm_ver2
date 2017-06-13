@@ -106,11 +106,13 @@ bool  setup_imm(oprand_t &opr,string const& s,int bits)
             else if (bits==16)
             {
                 opr.bits = 16;
+                //convert to binary
                 string org = bitset<16>(val).to_string();
-
                 string lsb = org.substr(8,8);
                 string msb = org.substr(0,8);
-                opr.imm_bin_st = lsb+msb;
+                //opr.imm_bin_st = lsb+msb;//swap (for obj)
+                opr.imm_bin_st = msb+lsb;//no swap(for lst)
+
             }
             else if (bits==32)
             {
@@ -140,7 +142,9 @@ bool  setup_imm(oprand_t &opr,string const& s,int bits)
                 str_bin += h2b(st[i]);
             string lsb = str_bin.substr(8,8);
             string msb = str_bin.substr(0,8);
-            opr.imm_bin_st = lsb+msb;
+            //opr.imm_bin_st = lsb+msb;//swap(for obj)
+            opr.imm_bin_st = msb+lsb;//no swap (for lst)
+
             opr.bits = 16;
             return true;
         }
@@ -178,6 +182,13 @@ string str_bin2hex(int hex_len,string bin)
     ss << hex << setw(hex_len) << setfill('0')  << result;
     string hexVal(ss.str());
     return hexVal;
+}
+string str_hex2bin(string hex)
+{
+    string result;
+    for(int i =0;i<hex.size();i++)
+        result+=h2b(hex[i]);
+    return result;
 }
 void init_operand(string str,oprand_t &opr)
 {

@@ -19,5 +19,5 @@ void dec(char *chp1, char *chp2)
         }
 
     }
-    cout<<str_bin2hex(opstr.size()/4,opstr)<<"\t"<<opstr<<endl;
+    printHex(opstr);
 }

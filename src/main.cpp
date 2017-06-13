@@ -258,7 +258,8 @@ int main ()
                     if(name.size()>2)
                         name = name.substr(name.size()-3,2);
                 }
-                cout<<"DB\t"<<pch<<"\t"<<name<<endl;
+                string bin_str =str_hex2bin(name);
+                printHex(bin_str);
                 code_PC+=1;
                 break;
             }
@@ -284,19 +285,19 @@ int main ()
             }
             if(!pch_str.compare("LEA"))
             {
-                cout<<"LEA\t";
                 code_PC+=4;
-                cout<<"8D";
                 pch = strtok (NULL, " \t,");
                 string reg_str(pch);
                 init_operand(reg_str,opr1);
-                string opstr = "00";
+                string opstr = "10001101";//8D
+                opstr+="00";
                 opstr+=opr1.reg_val;
                 opstr+="110";
                 pch = strtok (NULL, " \t,");
                 string name(pch);
                 name = lowerCase(name);
-                cout<<str_bin2hex(opstr.size()/4,opstr)<<"\t"<<name<<endl;
+                printHex(opstr);
+                //cout<<"\t"<<name<<endl;
                 break;
             }
             if(!pch_str.compare("RET"))

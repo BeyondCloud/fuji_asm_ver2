@@ -87,8 +87,10 @@ void mov(char *chp1, char *chp2)
             else
             {
                 code_PC+=4;
-                cout<<"8816"<<addr_tbl[opr1.name]<<endl;
-                return;
+                string bin_name="8816";
+                bin_name+=addr_tbl[opr1.name];
+                opstr = str_hex2bin(bin_name);
+
             }
 
         }
@@ -97,8 +99,9 @@ void mov(char *chp1, char *chp2)
             if(opr2.reg_val=="000")
             {
                 code_PC+=3;
-                cout<<"A3"<<addr_tbl[opr1.name]<<endl;
-                return;
+                string bin_name="A3";
+                bin_name+=addr_tbl[opr1.name];
+                opstr = str_hex2bin(bin_name);
             }
 
         }

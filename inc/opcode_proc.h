@@ -44,12 +44,14 @@ extern oprand_t opr1,opr2;
 bool setup_imm(oprand_t &opr,string const& s,int bits);
 
 string str_bin2hex(int hex_len,string bin);
+string str_hex2bin(string hex);
+
 bool is_number(const string& s);
 
 
 void init_operand(string str,oprand_t &opr);
 
-
+inline const char* h2b(char c);
 #define tbl_find(tbl,str) (tbl.find(str) != tbl.end())
 
 #define type_imm8(opr_t) (opr_t.type == imm && opr_t.bits == 8)
