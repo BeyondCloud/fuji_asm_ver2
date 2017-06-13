@@ -94,7 +94,7 @@ void data_seg()
                     else if(is_number(st))
                     {
                         int num;
-                        ss.clear();
+                        ss.str("");
                         ss << hex << setfill('0')<<setw(2)<<st;
                         result +=ss.str();
                     }
@@ -137,13 +137,15 @@ void data_seg()
                 if(is_number(s))
                 {
                     int num;
-                    ss.clear();
+                    ss.str("");
                     ss << hex << setfill('0')<<setw(4)<<s;
                     data_PC+=2;
+                    s = ss.str();
                 }
                 else if(tbl_find(addr_tbl,lowerCase(s)))
                 {
                     s = addr_tbl[lowerCase(s)];
+                    s = subHexStr(getPCstr(data_PC),s,4);
                     data_PC+=2;
                 }
                 result = s;
@@ -153,9 +155,9 @@ void data_seg()
             pch = strtok (NULL," \t,");
 
         }
-        lst_out<<line<<endl;
-        lst_out<<"PC:"<<getPCstr(old_dataPC)<<endl;
+        lst_out<<getPCstr(old_dataPC)<<"\t";
         lst_out<<result<<endl;
+        lst_out<<line<<endl;
 
     }
 }

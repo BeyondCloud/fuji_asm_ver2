@@ -4,33 +4,24 @@
   CR       EQU     0DH	;no 
   LF       EQU     0AH  ;no
 .STACK  200H	;this will change alot
+0000	25252048656C6C6F2C20576F726C642120457865637574696F6E207374617274732E2E2E2E070D0A24
    Start1  DB   "%% Hello, World! Execution starts....", BEL, CR, LF, '$'
-PC:0000
-25252048656C6C6F2C20576F726C642120457865637574696F6E207374617274732E2E2E2E070D0A24
+0029	0029
    size1   DW   $-start1  ;29 00 ,29h = 41 = sizeof start1 string 
-PC:0029
-0000
+002b	25252050726F6772616D2073746F70732E2045786974206E6F7721070D0A24
    Goodbye DB   "%% Program stops. Exit now!",           BEL, CR, LF, '$'
-PC:002b
-25252050726F6772616D2073746F70732E2045786974206E6F7721070D0A2424
+004a	001f
    size2   DW   $-Goodbye
-PC:004b
-002b
+004c	0D0A20202053756D2831202E2E20
     uMSG   DB   CR, LF, "   Sum(1 .. "
-PC:004d
-0D0A20202053756D2831202E2E20
+005a	01
     uIdgt  DB  1
-PC:005b
-242401
+005b	29203D20
            DB   ") = "
-PC:005e
-29203D20
+005f	0001
     uRval  DW   1
-PC:0062
-1
+0061	0D0A24
            DB   CR, LF, '$'
-PC:0064
-0D0A242401000124
    getDgt  PROC                     ; Subroutine to get a decimal digit
                                     ; and convert to binary
    gLoop:  MOV    DL, '?'
