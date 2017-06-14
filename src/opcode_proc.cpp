@@ -112,7 +112,7 @@ bool  setup_imm(oprand_t &opr,string const& s,int bits)
     }
     //decimal case
 
-    if(s[s.size()-1] != 'H')
+    if(s.back()!= 'H')
     {
 
         if(is_number(s))

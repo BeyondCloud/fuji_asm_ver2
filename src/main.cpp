@@ -85,10 +85,6 @@ int main ()
 
   //  pFinal();
   //  return 0;
-
-
-
-
     tbl_init();
     string line;
     string line_org;
@@ -155,7 +151,7 @@ int main ()
             {
                 pch = strtok (NULL," \t");
                 string pch_str2(pch);
-                if(pch_str2[pch_str2.size()-1]=='H')
+                if(pch_str2.back()=='H')
                 {
                     pch_str2 = pch_str2.substr(0,pch_str.size()-2);
                     reverse(pch_str2.begin(), pch_str2.end());
@@ -215,7 +211,7 @@ int main ()
             }
             else
             {
-                if(str[str.size()-1]==':')
+                if(str.back()==':')
                 {
                     pass1<<str<<"\t";
 
@@ -304,7 +300,7 @@ int main ()
 
         //match opcode
         string pch_str(pch);
-        if(pch_str[pch_str.size()-1] == ':')
+        if(pch_str.back() == ':')
         {
             //remove last ':'
             string name = pch_str.substr(0,pch_str.size()-1);
@@ -371,7 +367,7 @@ int main ()
             {
                 pch = strtok (NULL, " \t");
                 string name(pch);
-                if(name[name.size()-1] == 'H')
+                if(name.back() == 'H')
                 {
                     name = name.substr(0,name.size()-1);
                     if(is_hex_str(name))
@@ -507,7 +503,7 @@ int main ()
             j_to = "";
             j_len = 0;
         }
-        if(line_p2[line_p2.size()-1] == '<' ||line_p2[line_p2.size()-1] == '_')
+        if(line_p2.back() == '<' ||line_p2.back() == '_')
         {
             strcpy(str,line_p2.c_str());
             pch = strtok (str,"\t"); //PC
@@ -527,23 +523,12 @@ int main ()
             pch = strtok (NULL,"\t"); //len
             string len(pch);
             j_len = stoi(len);
-            if(line_p2[line_p2.size()-1] == '_')
+            if(line_p2.back()== '_')
              j_from ="0";
         }
         else
              p2_addr<<line_p2<<endl;
 
-        /*
-        else if(line_p2[line_p2.size()-1] == '_')
-        {
-            strcpy(str,line_p2.c_str());
-            strtok (str,"\t"); //PC
-            strtok (NULL,"\t"); //OP
-            pch = strtok (NULL,"\t");
-            string pch_str(pch);
-            cout<<pch_str<<endl;
-        }
-        */
     }
 
 

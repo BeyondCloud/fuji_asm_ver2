@@ -89,7 +89,7 @@ string data_seg()
                     {
                         //result +=equ_tbl[st];
                         string tmp = equ_tbl[st];
-                        if (tmp[tmp.size()-1] == 'H')
+                        if (tmp.back() == 'H')
                         {
                             string noH = tmp.substr(0,tmp.size()-1);
                             if(is_hex_str(noH))
