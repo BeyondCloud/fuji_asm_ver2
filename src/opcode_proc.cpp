@@ -125,7 +125,6 @@ bool  setup_imm(oprand_t &opr,string const& s,int bits)
                 opr.bits = 8;
                 opr.imm_bin_st = bitset<8>(val).to_string();
             }
-
             else if (bits==16)
             {
                 opr.bits = 16;

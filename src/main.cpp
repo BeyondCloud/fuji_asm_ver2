@@ -493,18 +493,21 @@ int main ()
             strcpy(str,line_p2.c_str());
             pch = strtok (str,"\t");
             string pch_str(pch);
-            j_from = pch_str;
+            if(j_from == "0")
+                j_from = "0000";
+            else
+                j_from = pch_str;
             string r_addr = subHexStr(j_to,j_from,j_len);
-            p2_addr<<r_addr<<"\t";
-            p2_addr<<"f:"<<j_from<<"\t";
-            p2_addr<<"t:"<<j_to<<endl;
+            p2_addr<<r_addr<<endl;
+            //p2_addr<<"f:"<<j_from<<"\t";
+            //p2_addr<<"t:"<<j_to<<endl;
 
 
             j_from ="";
             j_to = "";
             j_len = 0;
         }
-        if(line_p2[line_p2.size()-1] == '<')
+        if(line_p2[line_p2.size()-1] == '<' ||line_p2[line_p2.size()-1] == '_')
         {
             strcpy(str,line_p2.c_str());
             pch = strtok (str,"\t"); //PC
@@ -524,6 +527,8 @@ int main ()
             pch = strtok (NULL,"\t"); //len
             string len(pch);
             j_len = stoi(len);
+            if(line_p2[line_p2.size()-1] == '_')
+             j_from ="0";
         }
         else
              p2_addr<<line_p2<<endl;
@@ -545,16 +550,17 @@ int main ()
    // lst_out.open("lst.txt",ios::out);
 
     //return 0;
+    p2_addr.close();
+    p2_addr.open("p2_addr.txt",ios::in);
+
     org_in.clear();
     org_in.seekg(0, ios::beg);
-    pass2.clear();
-    pass2.seekg(0, ios::beg);
     is_out_i=1;
     while ( getline (org_in,line_org) )
     {
         if(is_out[is_out_i])
         {
-            getline(pass2,line_p2);
+            getline(p2_addr,line_p2);
             lst_out<<line_p2;
             lst_out<<line_org<<endl;
         }
