@@ -1,5 +1,5 @@
 .MODEL   SMALL
-;           IDENT   uTV01A           ; This directive is not defined in MASM
+           IDENT   uTV01A           ; This directive is not defined in MASM
                                     ; IDENT directive means IDENTification
                                     ; It is used to declare the program name
   BEL      EQU     07H              ; ASCII Code of BEL (Alarming bell)
@@ -17,17 +17,13 @@
    size2   DW   $-Goodbye
 004c	0D0A20202053756D2831202E2E20
     uMSG   DB   CR, LF, "   Sum(1 .. "
-005a	
-;   uIdgt  BSS  1                   ; 1-Byte buffer to store input value
 005a	01
-    uIdgt  DB  1
+   uIdgt   BSS  1                   ; 1-Byte buffer to store input value
 005b	29203D20
            DB   ") = "
-005f	0001
-    uRval  DW   1
-0061	
-;   uRval  BSS  2                   ; 2-Byte buffer to store result
-0061	0D0A24
+005f	02
+   uRval   BSS  2                   ; 2-Byte buffer to store result
+0060	0D0A24
            DB   CR, LF, '$'
 .CODE
 0000	   getDgt  PROC                     ; Subroutine to get a decimal digit

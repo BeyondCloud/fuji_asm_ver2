@@ -9,7 +9,7 @@
 #include  <assert.h>
 #include <algorithm>
 #include "opcode_proc.h"
-
+string data_seg_str;
 string data_seg()
 {
     string line;
@@ -24,6 +24,8 @@ string data_seg()
         isNewAddr = true;
         string result;//use for storing long string hex code
         strcpy(str,line.c_str());
+        if(str[0]==';')
+           continue;
         if(str[0]=='.') //exit data field
         {
             string pch_str(str);
@@ -42,13 +44,13 @@ string data_seg()
                 break;
             string pch_str(pch);
 
-            if(pch_str == "DB")
+            if(pch_str == "DB" ||pch_str == "BSS" )
             {
 
                 strcpy(str,line.c_str());
                 bool strREC= false;
                 string scan1;
-                //expand "xxx",'x' to ascii HEX code
+                //expand "xxx",'x' to ascii HEX code if there is
                 for(int i=0;i<line.size();i++)
                 {
                     if(str[i] == '\"'|| str[i] == '\'')
@@ -83,8 +85,10 @@ string data_seg()
                     pch = strtok (NULL," \t,");
                 while(pch!=NULL)
                 {
-
+                    if(pch[0]==';')
+                        break;
                     string st(pch);
+
                     if(tbl_find(equ_tbl,st))
                     {
                         //result +=equ_tbl[st];
@@ -162,6 +166,8 @@ string data_seg()
         lst_out<<getPCstr(old_dataPC)<<"\t";
         lst_out<<result<<endl;
         lst_out<<line<<endl;
+        data_seg_str+=result;
+
 
     }
     return "END";

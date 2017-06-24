@@ -14,7 +14,7 @@ void printPC(int pc)
 {
     cout<<"\nPC:"<<hex<<setw(4)<<setfill('0')<<pc<<endl;
 }
-string subHexStr(string s1,string s2,int len)
+string subHexStr(string s1,string s2,int return_len)
 {
     stringstream ss;
     int i1,i2;
@@ -30,7 +30,7 @@ string subHexStr(string s1,string s2,int len)
     int result = i1-i2;
     ss<<hex<<setw(4)<<setfill('0')<<result;
     string r_str = ss.str();
-    r_str = r_str.substr(r_str.size()-len,len);
+    r_str = r_str.substr(r_str.size()-return_len,return_len);
     return r_str;
 }
 string getPCstr(const int pc)

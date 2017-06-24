@@ -24,18 +24,23 @@ char org_name[]="test_data.cpp";
 char pass1_name[]="pass1.txt";
 char pass2_name[]="pass2.txt";
 char lst_name[]="lst.txt";
+char obj_name[]="obj.txt";
+
 bool is_out[256]={false};
 int is_out_i=0;
 
-string ident = "uASM-TV01S.ASM";
+string ident_str;
+string stack_size_str;
 fstream org_in;
 fstream pass1;
 fstream pass2;
 fstream p2_addr;
 
 fstream lst_out;
+fstream obj_out;
 
 string final_str;
+extern string data_seg_str;
 int data_PC = 0;//data counter
 int code_PC = 0;//
 vector<string> ins_vec = {"MOV","CMP","SUB","ADD","DEC","XCHG"};
@@ -61,7 +66,38 @@ void pFinal()
         cout<<final_str[i];
     }
 }
+void write_obj()
+{
+    string str;
+    obj_out<<OMF_str<<endl;
+    ss.str("");
+    ss << hex << setfill('0')<<setw(2)<<(ident_str.size()+2);
+    obj_out<<ss.str()<<endl;
+    obj_out<<"00"<<endl;
+    ss.str("");
+    ss << hex << setfill('0')<<setw(2)<<(ident_str.size());
+    obj_out<<ss.str()<<endl;
+    obj_out<<string_to_hex(ident_str)<<endl;
+    obj_out<<"B1"<<endl;
+    obj_out<<"962B0000"<<endl;
+    //stack _data Dgroup text code data ...
+    obj_out<<"05535441434B055F44415441064447524F5550055F5445585405535441434B044441544104434F4445"<<endl;
+    obj_out<<"0E98070048"<<endl;
+    obj_out<<getPCstr(code_PC).substr(2,2)<<endl;
+    obj_out<<"00050801"<<endl;
+    obj_out<<subHexStr("10B",getPCstr(code_PC),2)<<endl;
+    obj_out<<"980700486400030701AA98070074"<<endl;
+    obj_out<<stack_size_str<<endl;
+    obj_out<<"020601E29A060004FF02FF0359903400000106"<<endl;
 
+
+
+
+
+
+    //obj_out<<data_seg_str<<endl;
+
+}
 
 int main ()
 {
@@ -96,6 +132,7 @@ int main ()
     char* opr[2];
     string mnem="0";
     org_in.open(org_name,ios::in);
+    obj_out.open(obj_name,ios::out);
     if(!org_in)
     {
         cout<<"cannot open source file";
@@ -141,6 +178,12 @@ int main ()
         if(pch==NULL)   //avoid empty line
             continue;
         string pch_str(pch);
+        if(pch_str == "IDENT")
+        {
+            pch = strtok (NULL," \t,");
+            ident_str = pch;
+            continue;
+        }
         //init segment
         if(str[0]=='.')
         {
@@ -155,8 +198,10 @@ int main ()
                 {
                     pch_str2 = pch_str2.substr(0,pch_str.size()-2);
                     reverse(pch_str2.begin(), pch_str2.end());
-                    init_str+=pch_str2;
-              //      init_str+=after_stack_size_str;
+                    ss.str("");
+                    ss <<setfill('0')<<setw(4)<<pch_str2;
+                    stack_size_str=ss.str();
+
 
                 }
                 continue;
@@ -179,7 +224,6 @@ int main ()
             string find_equ_str(pch);
             if(find_equ_str[0]==';')
             {
-
                 break;
             }
             if(!find_equ_str.compare("EQU"))
@@ -476,6 +520,7 @@ int main ()
 
     pass1.close();
     pass2.close();
+    //========pass 3==================
     pass2.open("pass2.txt",ios::in);
     p2_addr.open("p2_addr.txt",ios::out);
     string j_to = "";
@@ -552,6 +597,7 @@ int main ()
         is_out_i++;
 
     }
+    write_obj();
   return 0;
 
 }

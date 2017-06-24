@@ -23,7 +23,7 @@
        74 6F 70 73 2E 20
        45 78 69 74 20 6E
        6F 77 21 07 0D 0A
-       24
+       24 
  004A 001F			   size2   DW   $-Goodbye
 
  004C 0D 0A 20 20 20 53		    uMSG   DB   CR, LF, "   Sum(1 .. "
@@ -35,22 +35,16 @@
  0061  0D 0A 24			           DB   CR, LF, '$'
  0000				.CODE
 
-
-
-
-
-
-
  0000				   getDgt  PROC                     ; Subroutine to get a decimal digit
 				                                    ; and convert to binary
  0000  B2 3F			   gLoop:  MOV    DL, '?'
- 0002  E8 0018			           CALL   putChr
+ 0002  E8 0018			           CALL   putChr	;1D-05 = 0018
  0005  B4 01			           MOV    AH, 01H           ; Get user input with echo
  0007  CD 21			           INT    21H
  0009  3C 30			           CMP    AL, '0'           ; Check for invalid input
- 000B  7E 09			           JLE    gError
+ 000B  7E 09			           JLE    gError	;16-0D=09
  000D  3C 39			           CMP    AL, '9'
- 000F  7F 05			           JG     gError
+ 000F  7F 05			           JG     gError	;16-11=05
  0011  8A D0			           MOV    DL, AL
  0013  2C 30			           SUB    AL, 48            ; Convert ASCII to decimal binary
  0015  C3			           RET
@@ -90,7 +84,7 @@
  003A  7E 05			           JLE    doDone
  003C  03 C2			           ADD    AX, DX
  003E  4A			           DEC    DX
- 003F  EB F6			           JMP    doLoop
+ 003F  EB F6			           JMP    doLoop	;F6 = -10
  0041				   doDone:                          ; Result is in AX (Two ASCII Chars)
  0041  D4			           DB     0D4H               ; Define the AAM instruction
  0042  0A			           DB     00AH

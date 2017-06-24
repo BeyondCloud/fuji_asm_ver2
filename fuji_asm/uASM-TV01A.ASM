@@ -7,7 +7,7 @@
   CR       EQU     0DH              ; ASCII Code of CR  (Carriage Return)
   LF       EQU     0AH              ; ASCII Code of LF  (Line Feed)
 
-.STACK  200H
+.STACK  202H
 
 .DATA                               ; The Data segment
    Start1  DB   "%% Hello, World! Execution starts....", BEL, CR, LF, '$'
@@ -22,6 +22,7 @@
     uRval  DW   1
 ;   uRval  BSS  2                   ; 2-Byte buffer to store result
            DB   CR, LF, '$'
+
 .CODE
 
    getDgt  PROC                     ; Subroutine to get a decimal digit
@@ -39,6 +40,8 @@
            RET
    gError: 
            MOV    DL, BEL           ; Error alert
+           MOV    DL, BEL           ; Error alert
+          MOV    DL, BEL           ; Error alert
           
            CALL   putChr 
            JMP    gLoop

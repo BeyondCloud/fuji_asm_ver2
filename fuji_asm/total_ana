@@ -1,13 +1,29 @@
-CALL note:
- 0018  E8 0002			           CALL   putChr  >next ins addr is 001B ,001B+2 = 001D
- 001B  EB E3			           JMP    gLoop
- 001D				   getDgt  ENDP              
- 001D				   putChr  PROC
- 0029  E8 FFF1			           CALL   putChr >next ins addr is 002C ,002C+FFF1 = 001D
- 002C  B2 0A			           MOV    DL, LF
-
-
-74 44 67 74 00 00 00 07 4E 65 77 4C 69 6E 65 27 00 00 06 70 75 74 43 68 72 1D 00 00 06 64 6F 43 6F 6D 70 32 00 00 04 4D 41 49 4E 47 00 00 53 88 04 00 00 A2 01 D1 A0 68 00 02 00 00 
+80 10 00 0E 
+75 41 53 4D 2D 54 56 30 31 41 2E 41 53 4D //uASM-TV01.ASM
+84 
+96 2B 00 00 
+05 53 54 41 43 4B //stack
+05 5F 44 41 54 41 //_DATA
+06 44 47 52 4F 55 50 //Blabla...
+05 5F 54 45 58 54 
+05 53 54 41 43 4B  
+04 44 41 54 41 //data
+04 43 4F 44 45 //code
+//======
+0E 98 07 00 48 
+80 //code length
+00 05 08 01 
+8B //10B - code length
+98 07 00 48 64 00 03 07 01 AA 98 07 00 74 00 02 02 06 01 E2 9A 06 00 04 FF 02 FF 03 59 90 34 00 00 01 06 
+67 65 74 44 67 74 00 00 00 07 //getDgt
+4E 65 77 4C 69 6E 65//newline
+27 00 00 06 //address of newline
+70 75 74 43 68 72 //putchr
+1D 00 00 06 //address of putchr
+64 6F 43 6F 6D 70	//docomp
+32 00 00 04 //addr of docomp
+4D 41 49 4E 47 00 00 //MAIN
+53 88 04 00 00 A2 01 D1 A0 68 00 02 00 00 
 //Hello
 25 25 20 48 65 6C 6C 6F 2C 20 57 6F 72 6C 64 21 20 45 78 65 63 75 74 69 6F 6E 20 73 74 61 72 74 73 2E 2E 2E 2E 07 0D 0A 24 
 29 00 	;29 00 ,29h = 41 = sizeof start1 string 
