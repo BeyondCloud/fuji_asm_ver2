@@ -15,7 +15,9 @@ extern map<string, string> sreg_tbl;
 extern map<string, string> mod_tbl;
 
 extern map<string, string> equ_tbl;
-extern map<string, string> addr_tbl;//record addr of function,4 hex
+extern map<string, string> addr_tbl;//record addr of function and PROC,4 hex
+extern map<string, string> proc_tbl;//record PROC,this has included on addr_tbl
+                                    //we create this table to output obj
 
 
 //map<string, op_fp>::iterator iter;

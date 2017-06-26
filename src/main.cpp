@@ -31,6 +31,8 @@ int is_out_i=0;
 
 string ident_str;
 string stack_size_str;
+string code_str;
+
 fstream org_in;
 fstream pass1;
 fstream pass2;
@@ -89,13 +91,20 @@ void write_obj()
     obj_out<<"980700486400030701AA98070074"<<endl;
     obj_out<<stack_size_str<<endl;
     obj_out<<"020601E29A060004FF02FF0359903400000106"<<endl;
+    for(auto it = proc_tbl.begin();it != proc_tbl.end(); ++it)
+    {
+        cout << it->first << "\t"<< it->second<<endl;
+        ss.str("");
+        ss << hex << setfill('0')<<setw(4)<<(it->first.size());
+        obj_out<<ss.str()<<"\t";
+        obj_out<<string_to_hex( it->first)<<"\t";
+        string swp =it->second.substr(2,2)+it->second.substr(0,2);
+        obj_out<<swp<<endl;
+    }
+    obj_out<<"5388040000A201D1A06800020000"<<endl;
+    obj_out<<data_seg_str<<endl;
+    obj_out<<"6DA08400010000"<<endl;
 
-
-
-
-
-
-    //obj_out<<data_seg_str<<endl;
 
 }
 
@@ -381,9 +390,12 @@ int main ()
                 strcpy(str,line.c_str());
                 pch = strtok (str," \t");
                 string name(pch);
-                name= lowerCase(name);
-                addr_tbl[name] =getPCstr(code_PC);
-                cout<<"  tbl:"<<name<<">"<<getPCstr(code_PC)<<endl;
+
+                string lower_name= lowerCase(name);
+                addr_tbl[lower_name] =getPCstr(code_PC);
+                proc_tbl[name] =getPCstr(code_PC);
+
+                cout<<"  tbl:"<<lower_name<<">"<<getPCstr(code_PC)<<endl;
 
                 //cout<<str<<"\t"<<"PROC"<<endl;
                 break;
@@ -522,7 +534,7 @@ int main ()
     pass2.close();
     //========pass 3==================
     pass2.open("pass2.txt",ios::in);
-    p2_addr.open("p2_addr.txt",ios::out);
+    p2_addr.open("pass3.txt",ios::out);
     string j_to = "";
     string j_from = "";
     int j_len = 0;
@@ -581,7 +593,7 @@ int main ()
 
     //return 0;
     p2_addr.close();
-    p2_addr.open("p2_addr.txt",ios::in);
+    p2_addr.open("pass3.txt",ios::in);
 
     org_in.clear();
     org_in.seekg(0, ios::beg);

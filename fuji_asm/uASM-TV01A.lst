@@ -1,0 +1,205 @@
+Microsoft (R) Macro Assembler Version 6.14.8444		    06/24/17 17:00:04
+uASM-TV01A.ASM						     Page 1 - 1
+
+
+				.MODEL   SMALL
+				;           IDENT   uTV01A           ; This directive is not defined in MASM
+				                                    ; IDENT directive means IDENTification
+				                                    ; It is used to declare the program name
+ = 0007				  BEL      EQU     07H              ; ASCII Code of BEL (Alarming bell)
+ = 0008				  BS       EQU     08H              ; ASCII Code of BS  (Backspace)
+ = 000D				  CR       EQU     0DH              ; ASCII Code of CR  (Carriage Return)
+ = 000A				  LF       EQU     0AH              ; ASCII Code of LF  (Line Feed)
+
+				.STACK  202H
+
+ 0000				.DATA                               ; The Data segment
+ 0000 25 25 20 48 65 6C		   Start1  DB   "%% Hello, World! Execution starts....", BEL, CR, LF, '$'
+       6C 6F 2C 20 57 6F
+       72 6C 64 21 20 45
+       78 65 63 75 74 69
+       6F 6E 20 73 74 61
+       72 74 73 2E 2E 2E
+       2E 07 0D 0A 24
+ 0029 0029			   size1   DW   $-start1  ;29 00 ,29h = 41 = sizeof start1 string 
+ 002B 25 25 20 50 72 6F		   Goodbye DB   "%% Program stops. Exit now!",           BEL, CR, LF, '$'
+       67 72 61 6D 20 73
+       74 6F 70 73 2E 20
+       45 78 69 74 20 6E
+       6F 77 21 07 0D 0A
+       24
+ 004A 001F			   size2   DW   $-Goodbye
+
+ 004C 0D 0A 20 20 20 53		    uMSG   DB   CR, LF, "   Sum(1 .. "
+       75 6D 28 31 20 2E
+       2E 20
+				;   uIdgt  BSS  1                   ; 1-Byte buffer to store input value
+ 005A 02			    uIdgt  DB  2
+ 005B  29 20 3D 20		           DB   ") = "
+ 005F 0001			    uRval  DW   1
+				;   uRval  BSS  2                   ; 2-Byte buffer to store result
+ 0061  0D 0A 24			           DB   CR, LF, '$'
+
+ 0000				.CODE
+
+ 0000				   getDgt  PROC                     ; Subroutine to get a decimal digit
+				                                    ; and convert to binary
+ 0000  B2 3F			   gLoop:  MOV    DL, '?'
+ 0002  E8 0018			           CALL   putChr
+ 0005  B4 01			           MOV    AH, 01H           ; Get user input with echo
+ 0007  CD 21			           INT    21H
+ 0009  3C 30			           CMP    AL, '0'           ; Check for invalid input
+ 000B  7E 09			           JLE    gError
+ 000D  3C 39			           CMP    AL, '9'
+ 000F  7F 05			           JG     gError
+ 0011  8A D0			           MOV    DL, AL
+ 0013  2C 30			           SUB    AL, 48            ; Convert ASCII to decimal binary
+ 0015  C3			           RET
+ 0016				   gError: 
+ 0016  B2 07			           MOV    DL, BEL           ; Error alert
+
+				          
+ 0018  E8 0002			           CALL   putChr 
+ 001B  EB E3			           JMP    gLoop
+ 001D				   getDgt  ENDP                     ; End of Subroutine
+				;
+ 001D				   putChr  PROC                     ; Subroutine to display a character
+				                                    ; at call register DL carries the
+ 001D  80 FA 00			           CMP    DL, 0             ; character to be displayed
+ 0020  74 04			           JE     NoMore            ; DL = 00 means end-of-string
+ 0022  B4 02			           MOV    AH, 02H
+ 0024  CD 21			           INT    21H
+ 0026				   NoMore: 
+ 0026  C3			           RET
+ 0027				   putChr  ENDP                     ; End of Subroutine
+				;
+ 0027				   NewLine PROC                     ; Subroutine to start a new line
+ 0027  B2 0D			           MOV    DL, CR
+
+ 0029  E8 FFF1			           CALL   putChr
+ 002C  B2 0A			           MOV    DL, LF
+ 002E  E8 FFEC			           CALL   putChr
+ 0031  C3			           RET
+ 0032				   NewLine ENDP                     ; End of Subroutine
+				;
+ 0032				   doComp  PROC                     ; Subroutine to compute Sum of 1 .. n
+ 0032  B8 0000			           MOV    AX, 0             ; at call register DL carries n
+
+ 0035  B6 00			           MOV    DH, 0
+				   
+ 0037  83 FA 00			   doLoop: CMP    DX, 0
+ 003A  7E 05			           JLE    doDone
+ 003C  03 C2			           ADD    AX, DX
+ 003E  4A			           DEC    DX
+ 003F  EB F6			           JMP    doLoop
+ 0041				   doDone:                          ; Result is in AX (Two ASCII Chars)
+ 0041  D4			           DB     0D4H              ; Define the AAM instruction
+ 0042  0A			           DB     00AH
+ 0043  05 3030			           ADD    AX, 3030H         ; Convert decimal binary to ASCII           
+				           
+ 0046  C3			           RET
+ 0047				   doComp  ENDP                     ; End of Subroutine
+				;
+				;
+ 0047				   MAIN    PROC
+
+ 0047  B8 ---- R		           MOV    AX, @DATA	    ; Set up DATA SEGMENT
+				 
+ 004A  8E D8			           MOV    DS, AX
+
+
+				   ; Show message Start1
+ 004C  8D 16 0000 R		           LEA    DX, Start1	    ; Display program start message
+ 0050  B4 09			           MOV    AH, 09H
+
+				           
+ 0052  CD 21			           INT    21H
+				   ;
+ 0054  E8 FFD0			   mStart: CALL   NewLine
+ 0057  E8 FFA6			           Call   getDgt
+ 005A  88 16 005A R		           MOV    uIdgt, DL
+
+ 005E  8A D0			           MOV    DL, AL
+				           
+ 0060  E8 FFCF			           CALL   doComp
+ 0063  86 E0			           XCHG   AH, AL
+ 0065  A3 005F R		           MOV    uRval, AX
+
+ 0068  8D 16 004C R		           LEA    DX, uMSG	    ; Display result message
+ 006C  B4 09			           MOV    AH, 09H
+ 006E  CD 21			           INT    21H
+ 0070				   mEnd:
+ 0070  E8 FFB4			           CALL   NewLine
+
+				   ;       Program exit
+ 0073  8D 16 002B R		           LEA    DX, Goodbye       ; Display goodbye message
+ 0077  B4 09			           MOV    AH, 09H
+
+ 0079  CD 21			           INT    21H
+				   ;
+ 007B  B8 4C00			           MOV    AX,4C00H          ; Program exits using DOS service
+ 007E  CD 21			           INT    21H
+				   ;
+ 0080				   MAIN    ENDP
+				   END 
+Microsoft (R) Macro Assembler Version 6.14.8444		    06/24/17 17:00:04
+uASM-TV01A.ASM						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+DGROUP . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	16 Bit	 0064	  Word	  Public  'DATA'	
+STACK  . . . . . . . . . . . . .	16 Bit	 0202	  Para	  Stack	  'STACK'	 
+_TEXT  . . . . . . . . . . . . .	16 Bit	 0080	  Word	  Public  'CODE'	
+
+
+Procedures,  parameters and locals:
+
+                N a m e                 Type     Value    Attr
+
+MAIN . . . . . . . . . . . . . .	P Near	 0047	  _TEXT	Length= 0039 Public
+  mStart . . . . . . . . . . . .	L Near	 0054	  _TEXT	
+  mEnd . . . . . . . . . . . . .	L Near	 0070	  _TEXT	
+NewLine  . . . . . . . . . . . .	P Near	 0027	  _TEXT	Length= 000B Public
+doComp . . . . . . . . . . . . .	P Near	 0032	  _TEXT	Length= 0015 Public
+  doLoop . . . . . . . . . . . .	L Near	 0037	  _TEXT	
+  doDone . . . . . . . . . . . .	L Near	 0041	  _TEXT	
+getDgt . . . . . . . . . . . . .	P Near	 0000	  _TEXT	Length= 001D Public
+  gLoop  . . . . . . . . . . . .	L Near	 0000	  _TEXT	
+  gError . . . . . . . . . . . .	L Near	 0016	  _TEXT	
+putChr . . . . . . . . . . . . .	P Near	 001D	  _TEXT	Length= 000A Public
+  NoMore . . . . . . . . . . . .	L Near	 0026	  _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 0000h	 
+@DataSize  . . . . . . . . . . .	Number	 0000h	 
+@Interface . . . . . . . . . . .	Number	 0000h	 
+@Model . . . . . . . . . . . . .	Number	 0002h	 
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 DGROUP
+@fardata?  . . . . . . . . . . .	Text   	 FAR_BSS
+@fardata . . . . . . . . . . . .	Text   	 FAR_DATA
+@stack . . . . . . . . . . . . .	Text   	 DGROUP
+BEL  . . . . . . . . . . . . . .	Number	 0007h	 
+BS . . . . . . . . . . . . . . .	Number	 0008h	 
+CR . . . . . . . . . . . . . . .	Number	 000Dh	 
+Goodbye  . . . . . . . . . . . .	Byte	 002B	  _DATA	
+LF . . . . . . . . . . . . . . .	Number	 000Ah	 
+Start1 . . . . . . . . . . . . .	Byte	 0000	  _DATA	
+size1  . . . . . . . . . . . . .	Word	 0029	  _DATA	
+size2  . . . . . . . . . . . . .	Word	 004A	  _DATA	
+uIdgt  . . . . . . . . . . . . .	Byte	 005A	  _DATA	
+uMSG . . . . . . . . . . . . . .	Byte	 004C	  _DATA	
+uRval  . . . . . . . . . . . . .	Word	 005F	  _DATA	
+
+	   0 Warnings
+	   0 Errors

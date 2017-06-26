@@ -19,6 +19,8 @@ map<string, string> sreg_tbl;
 map<string, string> mod_tbl;
 map<string, string> equ_tbl;
 map<string, string> addr_tbl;
+map<string, string> proc_tbl;
+
 
 
 void tbl_init()
