@@ -36,7 +36,7 @@ string code_str;
 fstream org_in;
 fstream pass1;
 fstream pass2;
-fstream p2_addr;
+fstream pass3;
 
 fstream lst_out;
 fstream obj_out;
@@ -70,7 +70,9 @@ void pFinal()
 }
 void write_obj()
 {
-    string str;
+    string str,line;
+    char *pch;
+    char line_ch[128];
     obj_out<<OMF_str<<endl;
     ss.str("");
     ss << hex << setfill('0')<<setw(2)<<(ident_str.size()+2);
@@ -104,6 +106,54 @@ void write_obj()
     obj_out<<"5388040000A201D1A06800020000"<<endl;
     obj_out<<data_seg_str<<endl;
     obj_out<<"6DA08400010000"<<endl;
+    pass3.clear();
+    pass3.seekg(0, ios::beg);
+    while ( getline (pass3,line) )
+    {
+        strcpy(line_ch,line.c_str());
+        pch = strtok (line_ch," \t");   //first word
+        while(true)
+        {
+            pch = strtok (NULL,"\t");  //second word
+            if(pch==NULL)
+                break;
+            string pch_str(pch);
+            if(pch_str=="e8")
+            {
+                obj_out<<pch_str;
+                pch_str = strtok (NULL,"\t");
+                pch_str = pch_str.substr(2,2)+pch_str.substr(0,2);
+                obj_out<<pch_str;
+                break;
+            }else if(pch_str.substr(0,2)=="b8")
+            {
+                pch_str = pch_str.substr(4,2)+pch_str.substr(2,2);
+                obj_out<<"b8"<<pch_str;
+                break;
+            }
+            else if(pch_str.substr(0,2)=="a3")
+            {
+                obj_out<<"a30000";
+                break;
+            }
+            else if(pch_str.substr(0,4)=="8d16")
+            {
+                obj_out<<"8d160000";
+                break;
+            }
+            else if(pch_str.substr(0,4)=="8816")
+            {
+                obj_out<<"88160000";
+                break;
+            }
+            obj_out<<pch_str;
+
+
+        }
+        obj_out<<endl;
+
+    }
+    obj_out<<"3B9C2600C8485501C44E140102C45C1001025A00C4661001025F00C46A1001024C00C4751001022B00828A02000074"
 
 
 }
@@ -534,7 +584,7 @@ int main ()
     pass2.close();
     //========pass 3==================
     pass2.open("pass2.txt",ios::in);
-    p2_addr.open("pass3.txt",ios::out);
+    pass3.open("pass3.txt",ios::out);
     string j_to = "";
     string j_from = "";
     int j_len = 0;
@@ -551,9 +601,9 @@ int main ()
             else
                 j_from = pch_str;
             string r_addr = subHexStr(j_to,j_from,j_len);
-            p2_addr<<r_addr<<endl;
-            //p2_addr<<"f:"<<j_from<<"\t";
-            //p2_addr<<"t:"<<j_to<<endl;
+            pass3<<r_addr<<endl;
+            //pass3<<"f:"<<j_from<<"\t";
+            //pass3<<"t:"<<j_to<<endl;
 
 
             j_from ="";
@@ -564,9 +614,9 @@ int main ()
         {
             strcpy(str,line_p2.c_str());
             pch = strtok (str,"\t"); //PC
-            p2_addr<<pch<<"\t";
+            pass3<<pch<<"\t";
             pch = strtok (NULL,"\t");
-            p2_addr<<pch<<"\t";
+            pass3<<pch<<"\t";
             pch = strtok (NULL,"\t"); //OP
             string pch_str(pch);
             if(tbl_find(addr_tbl,pch_str))
@@ -584,7 +634,7 @@ int main ()
              j_from ="0";
         }
         else
-             p2_addr<<line_p2<<endl;
+             pass3<<line_p2<<endl;
 
     }
 
@@ -592,8 +642,8 @@ int main ()
    // lst_out.open("lst.txt",ios::out);
 
     //return 0;
-    p2_addr.close();
-    p2_addr.open("pass3.txt",ios::in);
+    pass3.close();
+    pass3.open("pass3.txt",ios::in);
 
     org_in.clear();
     org_in.seekg(0, ios::beg);
@@ -602,7 +652,7 @@ int main ()
     {
         if(is_out[is_out_i])
         {
-            getline(p2_addr,line_p2);
+            getline(pass3,line_p2);
             lst_out<<line_p2;
             lst_out<<line_org<<endl;
         }
