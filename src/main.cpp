@@ -73,39 +73,39 @@ void write_obj()
     string str,line;
     char *pch;
     char line_ch[128];
-    obj_out<<OMF_str<<endl;
+    obj_out<<OMF_str;
     ss.str("");
     ss << hex << setfill('0')<<setw(2)<<(ident_str.size()+2);
-    obj_out<<ss.str()<<endl;
-    obj_out<<"00"<<endl;
+    obj_out<<ss.str();
+    obj_out<<"00";
     ss.str("");
     ss << hex << setfill('0')<<setw(2)<<(ident_str.size());
-    obj_out<<ss.str()<<endl;
-    obj_out<<string_to_hex(ident_str)<<endl;
-    obj_out<<"B1"<<endl;
-    obj_out<<"962B0000"<<endl;
+    obj_out<<ss.str();
+    obj_out<<string_to_hex(ident_str);
+    obj_out<<"B1";
+    obj_out<<"962B0000";
     //stack _data Dgroup text code data ...
-    obj_out<<"05535441434B055F44415441064447524F5550055F5445585405535441434B044441544104434F4445"<<endl;
-    obj_out<<"0E98070048"<<endl;
-    obj_out<<getPCstr(code_PC).substr(2,2)<<endl;
-    obj_out<<"00050801"<<endl;
-    obj_out<<subHexStr("10B",getPCstr(code_PC),2)<<endl;
-    obj_out<<"980700486400030701AA98070074"<<endl;
-    obj_out<<stack_size_str<<endl;
-    obj_out<<"020601E29A060004FF02FF0359903400000106"<<endl;
+    obj_out<<"05535441434B055F44415441064447524F5550055F5445585405535441434B044441544104434F4445";
+    obj_out<<"0E98070048";
+    obj_out<<getPCstr(code_PC).substr(2,2);
+    obj_out<<"00050801";
+    obj_out<<subHexStr("10B",getPCstr(code_PC),2);
+    obj_out<<"980700486400030701AA98070074";
+    obj_out<<stack_size_str;
+    obj_out<<"020601E09A060004FF02FF0359903400000106";
     for(auto it = proc_tbl.begin();it != proc_tbl.end(); ++it)
     {
-        cout << it->first << "\t"<< it->second<<endl;
+        cout << it->first<< it->second;
         ss.str("");
         ss << hex << setfill('0')<<setw(4)<<(it->first.size());
-        obj_out<<ss.str()<<"\t";
-        obj_out<<string_to_hex( it->first)<<"\t";
+        obj_out<<ss.str();
+        obj_out<<string_to_hex( it->first);
         string swp =it->second.substr(2,2)+it->second.substr(0,2);
-        obj_out<<swp<<endl;
+        obj_out<<swp;
     }
-    obj_out<<"5388040000A201D1A06800020000"<<endl;
-    obj_out<<data_seg_str<<endl;
-    obj_out<<"6DA08400010000"<<endl;
+    obj_out<<"5388040000A201D1A06800020000";
+    obj_out<<data_seg_str;
+    obj_out<<"6DA08400010000";
     pass3.clear();
     pass3.seekg(0, ios::beg);
     while ( getline (pass3,line) )
@@ -150,36 +150,44 @@ void write_obj()
 
 
         }
-        obj_out<<endl;
+        obj_out;
 
     }
-    obj_out<<"3B9C2600C8485501C44E140102C45C1001025A00C4661001025F00C46A1001024C00C4751001022B00828A02000074"
+    obj_out<<"3B9C2600C8485501C44E140102C45C1001025A00C4661001025F00C46A1001024C00C4751001022B00828A02000074";
+    obj_out.close();
+    //=========================================
+    obj_out.open("obj.txt",ios::in);
+    char buffer[1024];
+    getline (obj_out,str);
+    str = upperCase(str);
+   // sprintf (buffer, "%x",a );
+    strcpy(buffer,str.c_str());
+    fstream pFile;
+    pFile.open ("test.obj",ios::out);
+    int k = str.size();
+    for(int i =0;i<k;i+=2)
+    {
+        int dec;
+        ss.clear();
+        ss << hex << str.substr(i,2);
+        ss >> dec;
+        unsigned char uch = dec;
+        pFile.write((char*) &uch, sizeof(uch));
 
+    }
+    cout<<endl<<str.size();
+/*
+        unsigned char uch = 128;
+        pFile.write((char*) &uch, sizeof(uch));
+        uch = 8 ;
+        pFile.write((char*) &uch, sizeof(uch));
+        */
 
 }
 
 int main ()
 {
-/*
-    final_str = "80";
-    ss.str("");
-    ss << hex << setfill('0')<<setw(2)<<ident.size()+2;
-    final_str +=ss.str();
-    final_str+="00";
-    ss.str("");
-    ss << hex << setfill('0')<<setw(2)<<ident.size();
-    final_str+= ss.str();
-    final_str+=string_to_hex(ident);
-    final_str+="xx";
-    final_str+=init_str;
-    final_str+=stack_size_str;
-    final_str+=after_stack_size_str;
-*/
 
-
-
-  //  pFinal();
-  //  return 0;
     tbl_init();
     string line;
     string line_org;
