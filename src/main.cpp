@@ -20,7 +20,9 @@ stringstream ss;
 #include "misc_str.h"
 #include "data_segment.h"
 void jxx(char *pch,string J_hex);
-char org_name[]="test_data.cpp";
+//char org_name[]="test_data.cpp";
+char org_name[]="org.ASM";
+
 char pass1_name[]="pass1.txt";
 char pass2_name[]="pass2.txt";
 char lst_name[]="lst.txt";
@@ -367,6 +369,7 @@ int main ()
         cout<<"cannot open pass2 file";
         return 0;
     }
+//Uncomment toTest which out
 /*
     is_out_i++;
 
@@ -407,7 +410,8 @@ int main ()
         pch = strtok (str," \t,");
         if(pch==NULL)   //avoid empty line
             continue;
-
+//       else if(pch[0] == ';')
+//           continue;
 
         //match opcode
         string pch_str(pch);
@@ -578,7 +582,6 @@ int main ()
 
           cout<<"\t"<<line;
           cout<<"\n";
-        if(is_out[is_out_i])
             pass2<<line_org<<endl;
 
           //pass2<<"\n";

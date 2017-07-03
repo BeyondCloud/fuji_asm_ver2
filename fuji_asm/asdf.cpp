@@ -18,21 +18,8 @@ void ADC_Task(void const * argument)
 		{
 			if(buf_i==320)
 			{
-				use_buf = !use_buf;
-				for(i=0;i<(320-1);i++)
-				{
-					LCD_DrawLine( i,ADC_buffer[use_buf][i],i,ADC_buffer[use_buf][i+1],Black);
-				}
-				use_buf = !use_buf;
-				
-				for(i=0;i<(320-1);i++)
-				{
-					LCD_DrawLine( i,ADC_buffer[use_buf][i],i,ADC_buffer[use_buf][i+1],Green);
-				}
 				buf_i=0;
-				use_buf = !use_buf;
-				
-				
+				use_buf = !use_buf;	
 			}
 
 				ADC_buffer[use_buf][buf_i] = (ADC_val)*240/4096;
@@ -45,5 +32,20 @@ void ADC_Task(void const * argument)
 
 
 
+/*
+   float val=0;
+    char str[16];
+     for(;;)
+  {
+    val+=0.001;
+   // sprintf(str, "%.3f", val);
+  //	snprintf(str, sizeof(str), "%.3f", val);
+  float2str(val,str,3);
+   LCD_print(10, 30, str);
+    osDelay(300);
+    LCD_printColor(10, 30, str, Black);
+   // LCD_Clear(Black);
+  }
+*/
 
 }

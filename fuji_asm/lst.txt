@@ -1,22 +1,56 @@
-.MODEL   SMALL
+;
+; +========================================================================+
+; |                                                                        |
+; |     ASSEMBLY LANGUAGE PROGRAM FOR uASM 80x86 (INTEL-BASED) Assembler   |
+; |                                                                        |
+; +========================================================================+
+;
+;---------------------------------------------------------------------------
+; * FILE NAME:    uASM-TV01A.ASM
+; * PROGRAM NAME: uTV01
+; * FUNCTION:     This file is intended to be one example of testing and
+;                 verifying the functionality uASM assembler.
+; * VERSION:      1.00
+; * HISTORY:      (1) Creation -     2017/05/11
+;                 (2) Modification - 2017/06/04
+; * Notes:
+;   (A) This file contains an assembly program which is based on MS Macro
+;       Assembler and the program should be assembled correctly with minor
+;       modification (change the directives IDENT and BSS)
+;   (B) Th program in this file can be used for Intel 80x86 processor in
+;       16-bit mode.
+;   (C) For more details, please refer to the comments in the program.         
+;
+;---------------------------------------------------------------------------
+;
            IDENT   uTV01A           ; This directive is not defined in MASM
                                     ; IDENT directive means IDENTification
                                     ; It is used to declare the program name
+; The following 1 line is intentionally left empty                     
+;
+;---------------------------------------------------------------------------
+; DEFINITIONs OF SYMBOLS
+;---------------------------------------------------------------------------
+;
   BEL      EQU     07H              ; ASCII Code of BEL (Alarming bell)
   BS       EQU     08H              ; ASCII Code of BS  (Backspace)
   CR       EQU     0DH              ; ASCII Code of CR  (Carriage Return)
   LF       EQU     0AH              ; ASCII Code of LF  (Line Feed)
+;
 .STACK  200H
+;
+;----- /// START OF DATA SEGMENT /// ---------------------------------------
+;
 0000	25252048656C6C6F2C20576F726C642120457865637574696F6E207374617274732E2E2E2E070D0A24
    Start1  DB   "%% Hello, World! Execution starts....", BEL, CR, LF, '$'
 0029	0029
-   size1   DW   $-start1  ;29 00 ,29h = 41 = sizeof start1 string 
+   size1   DW   $-start1
 002b	25252050726F6772616D2073746F70732E2045786974206E6F7721070D0A24
    Goodbye DB   "%% Program stops. Exit now!",           BEL, CR, LF, '$'
 004a	001f
    size2   DW   $-Goodbye
 004c	0D0A20202053756D2831202E2E20
-    uMSG   DB   CR, LF, "   Sum(1 .. "
+   uMSG    DB   CR, LF, "   Sum(1 .. "
 005a	01
    uIdgt   BSS  1                   ; 1-Byte buffer to store input value
 005b	29203D20
@@ -35,7 +69,7 @@
 000b	7e	09           JLE    gError
 000d	3c39           CMP    AL, '9'
 000f	7f	05           JG     gError
-0011	8ad0           MOV    DL, AL
+0011	8ad0           MOV    DL, AL           
 0013	2c30           SUB    AL, 48            ; Convert ASCII to decimal binary
 0015	c3           RET
 0016	b207           MOV    DL, BEL           ; Error alert
@@ -70,9 +104,9 @@
 0046	c3           RET
 0047		   doComp  ENDP                     ; End of Subroutine
 0047	   MAIN    PROC
-0047	b80000           MOV    AX, @DATA     ; Set up DATA SEGMENT
+0047	b80000           MOV    AX, @DATA	    ; Set up DATA SEGMENT
 004a	8ed8           MOV    DS, AX
-004c	8d16	0000           LEA    DX, Start1      ; Display program start message
+004c	8d16	0000           LEA    DX, Start1	    ; Display program start message
 0050	b409           MOV    AH, 09H
 0052	cd21           INT    21H
 0054	e8	ffd0   mStart: CALL   NewLine
@@ -82,7 +116,7 @@
 0060	e8	ffcf           CALL   doComp
 0063	86e0           XCHG   AH, AL
 0065	a3005f           MOV    uRval, AX
-0068	8d16	004c           LEA    DX, uMSG      ; Display result message
+0068	8d16	004c           LEA    DX, uMSG	    ; Display result message
 006c	b409           MOV    AH, 09H
 006e	cd21           INT    21H
 0070	e8	ffb4           CALL   NewLine
@@ -92,4 +126,4 @@
 007b	b84c00           MOV    AX,4C00H          ; Program exits using DOS service
 007e	cd21           INT    21H
 0080		   MAIN    ENDP
-0080		   END 
+0080		   END  MAIN

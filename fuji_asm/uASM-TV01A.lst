@@ -117,13 +117,13 @@ uASM-TV01A.ASM						     Page 1 - 1
 				   ;
  0054  E8 FFD0			   mStart: CALL   NewLine
  0057  E8 FFA6			           Call   getDgt
- 005A  88 16 005A R		           MOV    uIdgt, DL
+ 005A  88 16 005A R		           MOV    uIdgt, DL  ;88 16 00 00 in obj
 
  005E  8A D0			           MOV    DL, AL
 				           
  0060  E8 FFCF			           CALL   doComp
  0063  86 E0			           XCHG   AH, AL
- 0065  A3 005F R		           MOV    uRval, AX
+ 0065  A3 005F R		           MOV    uRval, AX ;A3 0000
 
  0068  8D 16 004C R		           LEA    DX, uMSG	    ; Display result message
  006C  B4 09			           MOV    AH, 09H
@@ -134,7 +134,7 @@ uASM-TV01A.ASM						     Page 1 - 1
 				   ;       Program exit
  0073  8D 16 002B R		           LEA    DX, Goodbye       ; Display goodbye message
  0077  B4 09			           MOV    AH, 09H
-
+ 
  0079  CD 21			           INT    21H
 				   ;
  007B  B8 4C00			           MOV    AX,4C00H          ; Program exits using DOS service
